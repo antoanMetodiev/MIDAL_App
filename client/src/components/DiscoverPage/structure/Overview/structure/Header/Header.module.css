@@ -1,0 +1,52 @@
+/* Main Container: */
+.header-container {
+    position: absolute;
+    top: 0;
+    z-index: 3;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+
+/* Title-Logo Container: */
+.title-logo-container {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    margin-left: 1em;
+   
+}
+
+.title-logo-container h1 {
+    color: #ffffffe5;
+}
+
+.midal-logo {
+    width: 3em;
+    height: 3em;
+    border-radius: 1em;
+}
+
+
+/* Overview-Navigation: */
+.overview-navigation {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    color: #fefefe;
+    margin-right: 1em;
+}
+
+.overview-navigation > ul {
+    display: flex;
+    gap: 1em;
+    list-style: none;
+}
+
+.overview-navigation > button {
+    align-self: center;
+    color: #fefefe;
+    background-color: blue;
+}
+
