@@ -1,0 +1,24 @@
+.overview-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow-y: hidden;
+}
+
+.backVideo {
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    aspect-ratio: 16 / 8; /* Задава съотношение на страните 16:8 */
+}
+
+.black-shadow {
+    position: absolute;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: #000000af;
+    opacity: 0.5;
+}
