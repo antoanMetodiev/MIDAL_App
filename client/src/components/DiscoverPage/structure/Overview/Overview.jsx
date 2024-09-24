@@ -2,6 +2,7 @@ import style from "./Overview.module.css";
 import backVideo from "../../resources/videos/audio-grid.mp4";
 
 import Header from "./structure/Header/Header";
+import Body from "./structure/Body/Body";
 
 const Overview = () => {
 
@@ -19,6 +20,7 @@ const Overview = () => {
 
             {/* Here starting the structure: */}
             <Header />
+            <Body />
 
 
         </div>
