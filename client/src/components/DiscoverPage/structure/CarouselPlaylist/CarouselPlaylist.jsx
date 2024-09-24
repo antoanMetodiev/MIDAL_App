@@ -13,7 +13,7 @@ const CarouselPlaylist = () => {
     const settings = {
         dots: true,
         infinite: true,
-        speed: 300,
+        speed: 700,
         slidesToShow: 3,
         slidesToScroll: 1,
     };
@@ -22,7 +22,7 @@ const CarouselPlaylist = () => {
         <article className={style['carousel-Playlist-container']}>
             <div className={style['card-list']}>
                 <Slider {...settings}>
-                    {allCardsData.map(card => <Card data={card} />)}
+                    {allCardsData.map(card => <Card key={card.text} data={card} />)}
                 </Slider>
             </div>
         </article>
