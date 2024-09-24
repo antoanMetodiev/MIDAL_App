@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="UTF-8" />
-	<link rel="icon" type="image/svg+xml" href="/vite.svg" />
+	<link rel="icon" type="image/svg+xml" href="./src/components/DiscoverPage/resources/images/midal-logo.jpg" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>MIDAL</title>
 
@@ -13,6 +13,27 @@
 			margin: 0;
 			box-sizing: border-box;
 		}
+
+		/* Стилизация за WebKit (Chrome, Safari) */
+::-webkit-scrollbar {
+    width: 12px; /* Ширина на скролера */
+    background-color: #f1f1f1; /* Цвет на фона на скролера */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #888; /* Цвет на самия скролер */
+    border-radius: 10px; /* Закръглени ъгли */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* Цвет при задържане с мишката */
+}
+
+/* Стилизация за Firefox */
+* {
+    scrollbar-width: thin; /* Дебелина на скролера */
+    scrollbar-color: #888 #f1f1f1; /* Цвет на самия скролер и фон */
+}
 	</style>
 
 </head>
