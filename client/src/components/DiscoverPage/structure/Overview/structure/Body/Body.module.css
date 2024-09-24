@@ -1,0 +1,52 @@
+
+/* Main-Container: */
+article.wrapper {
+    position: absolute;
+    bottom: 4em;
+    z-index: 3;
+    display: flex;
+    color: #fff;
+    justify-content: center;
+    margin: 0 auto;
+    width: 100%;
+    gap: 3em;
+    align-items: center;
+}
+
+
+/* Aside-Content-Container: */
+.aside-content-container {
+    width: 30em;
+
+}
+
+.aside-content-container > h2 {
+    font-size: 3em;
+}
+
+.aside-content-container > p {
+    font-size: 1.5em;
+    line-height: 1.5;
+    margin-top: -1em;
+}
+
+.aside-content-container > button {
+    padding: 0.7em 1.6em;
+    font-size: 1.1em;
+    font-weight: 500;
+    border-radius: 1em;
+    border: none;
+    background-color: gray;
+    color: #fff;
+}
+
+
+
+
+
+/* Image-Container: */
+div.image-container > img {
+    width: 40em;
+    height: 40em;
+}
+
