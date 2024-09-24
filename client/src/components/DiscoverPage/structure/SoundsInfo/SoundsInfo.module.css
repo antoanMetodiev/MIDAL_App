@@ -1,0 +1,134 @@
+/* BackImage: */
+.backImage {
+    width: 100%;
+    object-fit: cover;
+}
+
+.black-shadow {
+    position: absolute;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    opacity: 0.6;
+}
+
+
+/* Content: */
+.sounds-info-container {
+    position: relative;
+}
+
+.sounds-info-container_title {
+    position: absolute;
+    z-index: 3;
+    top: 2.3em;
+    left: 9.5em;
+    letter-spacing: 3px;
+    margin-left: -3em;
+    width: 10em;
+    line-height: 1.4;
+    transform: translate(-50%, -50%);
+    font-size: 3.7em;
+    color: #07332F;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    text-shadow: 3px 3px 5px black;
+
+    /* Добавяне на анимация за левитиране */
+    animation: levitate 2s infinite ease-in-out;
+}
+
+.sounds-info-container .content {
+    z-index: 3;
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fefefe;
+    display: flex;
+    gap: 3.3em;
+     /* Добавяне на анимация за появяване отдолу */
+     animation: slideIn 1.2s forwards; /* Задава анимацията */
+}
+
+/* самата карта е това: */
+.card-container {
+    width: 23em;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.card-container .titles-container {
+    display: flex;
+    gap: 0.8em;
+    align-items: center;
+    text-shadow: 3px 3px 5px black;
+    /* Силна черна сянка */
+}
+
+.card-container .titles-container>h2 {}
+
+.card-container .text {
+    font-size: 1.2em;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-weight: 300;
+    color: silver;
+    line-height: 1.5;
+    text-shadow: 3px 3px 5px black;
+    /* Силна черна сянка */
+}
+
+
+
+
+
+
+
+
+/* FOR COLORS: */
+.max {
+    background-color: #332619;
+    color: #E1A76E;
+    padding: 4px 12px;
+    border-radius: 0.4em;
+}
+
+.high {
+    background-color: #07332F;
+    color: #21FEEC;
+    padding: 4px 12px;
+    border-radius: 0.4em;
+}
+
+.low {
+    background-color: #393940;
+    color: #FFFFFF;
+    padding: 4px 12px;
+    border-radius: 0.4em;
+}
+
+
+
+/* Дефиниране на анимацията */
+@keyframes levitate {
+    0% {
+        transform: translate(-50%, -50%) translateY(0); /* Нормална позиция */
+    }
+    50% {
+        transform: translate(-50%, -50%) translateY(-10px); /* Вдигане нагоре */
+    }
+    100% {
+        transform: translate(-50%, -50%) translateY(0); /* Връщане обратно */
+    }
+}
+
+/* Дефиниране на анимацията */
+@keyframes slideIn {
+    from {
+        transform: translate(-50%, 100%); /* Започва под видимата част */
+        opacity: 0; /* Започва прозрачен */
+    }
+    to {
+        transform: translate(-50%, -50%); /* Позиция в центъра */
+        opacity: 1; /* Пълна видимост */
+    }
+}
