@@ -1,12 +1,20 @@
 const express = require('express');
-
 const app = express();
+const cors = require('cors');
 
-app.get('/', (req, res) => {
-    res.send('LMAOOO!!!');
+app.use(cors({
+    origin: "http://localhost:5173",
+}));
+
+
+// Слушам когато някой се опита да направи заявка на този URL:
+app.get('/api', (req, res) => {
+    res.json({fruits: ["Orange", "Watermelon", "Melon"]});
 });
 
-const PORT = 4000;
+
+
+const PORT = 8080;
 app.listen(PORT, () => {
-    console.log('Server is Listening on port 4000!!!');
+    console.log('Server is Listening on port 8080!!!');
 });
