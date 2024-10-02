@@ -15,25 +15,34 @@
 		}
 
 		/* Стилизация за WebKit (Chrome, Safari) */
-::-webkit-scrollbar {
-    width: 12px; /* Ширина на скролера */
-    background-color: #f1f1f1; /* Цвет на фона на скролера */
-}
+		::-webkit-scrollbar {
+			width: 12px;
+			/* Ширина на скролера */
+			background-color: #f1f1f1;
+			/* Цвет на фона на скролера */
+		}
 
-::-webkit-scrollbar-thumb {
-    background-color: #888; /* Цвет на самия скролер */
-    border-radius: 10px; /* Закръглени ъгли */
-}
+		::-webkit-scrollbar-thumb {
+			background-color: #888;
+			/* Цвет на самия скролер */
+			background-color: #ABABAB;
+			/* Цвет на самия скролер */
+			border-radius: 10px;
+			/* Закръглени ъгли */
+		}
 
-::-webkit-scrollbar-thumb:hover {
-    background-color: #555; /* Цвет при задържане с мишката */
-}
+		::-webkit-scrollbar-thumb:hover {
+			background-color: #555;
+			/* Цвет при задържане с мишката */
+		}
 
-/* Стилизация за Firefox */
-* {
-    scrollbar-width: thin; /* Дебелина на скролера */
-    scrollbar-color: #888 #f1f1f1; /* Цвет на самия скролер и фон */
-}
+		/* Стилизация за Firefox */
+		* {
+			scrollbar-width: thin;
+			/* Дебелина на скролера */
+			scrollbar-color: #888 #f1f1f1;
+			/* Цвет на самия скролер и фон */
+		}
 	</style>
 
 </head>
@@ -42,6 +51,18 @@
 	<div id="root"></div>
 	<script type="module" src="/src/main.jsx"></script>
 	<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+	<script src="https://www.youtube.com/iframe_api"></script>
+	<!-- <script src="https://apis.google.com/js/api.js"></script> -->
+	<script src="https://accounts.google.com/gsi/client" async defer></script>
+
+
+	<script>
+		document.addEventListener('contextmenu', function (e) {
+			e.preventDefault();
+		});
+	</script>
+
+	
 </body>
 
 </html>
