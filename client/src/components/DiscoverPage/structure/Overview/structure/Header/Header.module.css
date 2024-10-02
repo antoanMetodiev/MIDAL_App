@@ -50,3 +50,10 @@
     background-color: blue;
 }
 
+.songs-podcasts-li-item:hover {
+    cursor: pointer;
+}
+
+.overview-navigation ul li {
+    cursor: pointer;
+}
