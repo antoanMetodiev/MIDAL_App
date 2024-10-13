@@ -4,32 +4,43 @@ import axios from "axios";
 
 const Login = ({
     setUserDataHandler,
+    setHideBothHandler,
 }) => {
 
 
     const loginUser = async (event) => {
         event.preventDefault();
 
+        debugger;
         try {
             const data = {
                 username: event.target.username.value,
                 password: event.target.password.value,
             };
 
-            const userData = await axios.post('http://localhost:8080/login', { user: data });
+            let userData = await axios.post('http://localhost:8080/login', { user: data });
+            userData = userData.data;
 
-            console.log(userData.data)
-            setUserDataHandler(userData.data);
-
+            if (userData.username) {
+                setUserDataHandler(userData);
+                localStorage.setItem('MIDAL_USER', JSON.stringify(userData));
+            }
 
         } catch (err) {
             console.log('Edna zaqvka da ne mojesh da napravish v "/login"');
         }
     };
 
+    const activateSetHideBothHandler = () => {
+        setHideBothHandler();
+    };
 
     return (
         <article className={style['login-wrapper']}>
+
+            <h4 onClick={activateSetHideBothHandler}>Hide..</h4>
+
+
             <form
                 onSubmit={loginUser}
                 className={style['login-form']}
