@@ -13,7 +13,33 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-    }
+    },
+    imageURL: {
+        type: String,
+    },
+    secret_world: {
+        type: String,
+    },
+
+    
+    friendsList: [{
+        type: Object,
+    }],
+    friendsRequests: [{
+        type: Object,
+    }],
+    blockedUsers: [{
+        type: Object,
+    }],
+    closeFriends: [{
+        type: Object,
+    }],
+    myPublishedPlaylists: [{
+        type: Object,
+    }],
+    myStories: [{
+        type: Object,
+    }],
 });
 
 const UserModel = mongoose.model('users', UserSchema);
