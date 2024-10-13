@@ -51,8 +51,10 @@ app.post('/save-tokens', async (req, res) => {
 });
 
 app.get('/update-token', async (req, res) => {
+
     const refreshTokenDoc = await GoogleRefreshTokenModel.findOne();
     const refreshToken = refreshTokenDoc.refreshToken;
+
 
     try {
         const response = await axios.post('https://oauth2.googleapis.com/token', {
