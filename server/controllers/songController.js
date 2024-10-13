@@ -3,6 +3,7 @@ const app = require('express')();
 const SongModel = require('../models/SongModel');
 const Video_Id_Model = require('../models/Video_Id_Model');
 
+// ТОЗИ URL - ТЪРСИ ОТ API:
 app.post('/create-songs', async (req, res) => {
     let data = req.body.songs;
     let songs = [];
@@ -46,6 +47,7 @@ app.post('/create-songs', async (req, res) => {
 });
 
 
+// ТОЗИ URL - ТЪРСИ ОТ БАЗАТА ДАННИ:
 app.post('/get-songs', async (req, res) => {
     const title = req.body.searchTerm;
 
