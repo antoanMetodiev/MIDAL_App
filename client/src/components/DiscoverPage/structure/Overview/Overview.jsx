@@ -4,7 +4,12 @@ import backVideo from "../../resources/videos/audio-grid.mp4";
 import Header from "./structure/Header/Header";
 import Body from "./structure/Body/Body";
 
-const Overview = () => {
+const Overview = ({
+    setShowRegisterHandler,
+    setShowLoginHandler,
+    isRegistered,
+    setIsRegisteredHandler
+}) => {
 
 
     return (
@@ -19,7 +24,11 @@ const Overview = () => {
             />
 
             {/* Here starting the structure: */}
-            <Header />
+            <Header 
+                isRegistered={isRegistered}
+                setIsRegisteredHandler={setIsRegisteredHandler}
+                setShowRegisterHandler={setShowRegisterHandler} 
+                setShowLoginHandler={setShowLoginHandler} />
             <Body />
 
 

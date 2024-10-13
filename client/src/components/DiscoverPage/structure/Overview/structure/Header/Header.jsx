@@ -33,8 +33,7 @@ const Header = ({
     };
 
     const logOut = () => {
-        debugger;
-        cookies.remove('jwtToken');
+        localStorage.removeItem("MIDAL_USER")
         setIsRegisteredHandler(false);
     };
 
