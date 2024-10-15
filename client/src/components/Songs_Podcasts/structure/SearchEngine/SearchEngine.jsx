@@ -9,9 +9,7 @@ const SearchEngine = () => {
         event.preventDefault();
         const songName = event.target.song_name.value;
 
-        debugger;
-
-        const token = Cookies.get('spotify_token');
+        const token = Cookies.get('token');
         const response = await axios.get(`https://api.spotify.com/v1/search`, {
             headers: {
                 Authorization: `Bearer ${token}`
