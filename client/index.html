@@ -3,11 +3,24 @@
 
 <head>
 	<meta charset="UTF-8" />
-	<link rel="icon" type="image/svg+xml" href="./src/components/DiscoverPage/resources/images/midal-logo.jpg" />
+	<link class= "rounded-image" rel="icon" type="image/svg+xml" href="./src/components/DiscoverPage/resources/images/midal-logo.jpg" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>MIDAL - Music Streaming</title>
+	<title class="logo-img">MIDAL - Music Streaming</title>
 
 	<style>
+
+
+		.rounded-image {
+			border-radius: 50%;
+			/* Прави изображението закръглено */
+			width: 150px;
+			/* Задай ширина */
+			height: 150px;
+			/* Задай височина */
+			object-fit: cover;
+			/* Запазва съотношението на изображението при закръгляне */
+		}
+
 		body {
 			padding: 0;
 			margin: 0;
@@ -54,15 +67,74 @@
 	<script src="https://www.youtube.com/iframe_api"></script>
 	<!-- <script src="https://apis.google.com/js/api.js"></script> -->
 	<script src="https://accounts.google.com/gsi/client" async defer></script>
+	<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
 
 
-	<script>
+	<!-- <script>
 		document.addEventListener('contextmenu', function (e) {
 			e.preventDefault();
 		});
-	</script>
 
-	
+		document.onkeydown = function (e) {
+			if (e.key === "F12" || (e.ctrlKey && e.shiftKey && e.key === "I") || (e.ctrlKey && e.shiftKey && e.key === "J")) {
+				e.preventDefault();
+			}
+
+			// Блокиране на F12
+			if (e.key === "F12") {
+				e.preventDefault();
+			}
+
+			// Блокиране на Ctrl + Shift + I (DevTools) и Cmd + Opt + I (MacOS)
+			if ((e.ctrlKey && e.shiftKey && e.key === "I") || (e.metaKey && e.altKey && e.key === "I")) {
+				e.preventDefault();
+			}
+
+			// Блокиране на Ctrl + Shift + J (Конзола) и Cmd + Opt + J (MacOS)
+			if ((e.ctrlKey && e.shiftKey && e.key === "J") || (e.metaKey && e.altKey && e.key === "J")) {
+				e.preventDefault();
+			}
+
+			// Блокиране на Ctrl + Shift + C (Inspect) и Cmd + Opt + C (MacOS)
+			if ((e.ctrlKey && e.shiftKey && e.key === "C") || (e.metaKey && e.altKey && e.key === "C")) {
+				e.preventDefault();
+			}
+
+			// Блокиране на Ctrl + U (View Source) и Cmd + Opt + U (MacOS)
+			if ((e.ctrlKey && e.key === "U") || (e.metaKey && e.altKey && e.key === "U")) {
+				e.preventDefault();
+			}
+
+			// Блокиране на Ctrl + Shift + K (DevTools конзола във Firefox)
+			if (e.ctrlKey && e.shiftKey && e.key === "K") {
+				e.preventDefault();
+			}
+
+			// Блокиране на Ctrl + Shift + S (DevTools в Opera)
+			if (e.ctrlKey && e.shiftKey && e.key === "S") {
+				e.preventDefault();
+			}
+		};
+
+
+
+
+		
+
+		// var devtools = /./;
+		// devtools.toString = function () {
+		// 	this.opened = true;
+		// };
+
+		// console.log('%c ', devtools);
+
+		// if (devtools.opened) {
+		// 	alert("DevTools е отворен! Достъпът до тази страница е ограничен.");
+		// 	window.location.href = "https://example.com";
+		// }
+	</script> -->
+
+
 </body>
 
 </html>
