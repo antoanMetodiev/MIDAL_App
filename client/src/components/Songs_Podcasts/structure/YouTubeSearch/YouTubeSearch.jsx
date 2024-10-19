@@ -7,18 +7,26 @@ import cookies from "js-cookie";
 // const API_KEY = 'AIzaSyA1VMyCKstr7Kc13g_ZEmF9bp9GWIapJ_0';
 
 import updateAccessToken from "../../../GoogleAuth/utils/updateAccessToken";
+import addSongImage from "../../resources/images/add-song.png"
 
 const YouTubeSearch = ({
     searchTerm,
     onVideoSelect,
     setVideosHandler,
     videos,
+    addSongToPlaylist,
+    playlistTypes,
+    setSongIsPlayingHandler,
 }) => {
+    const [showOrHideOptions, setShowOrHideOptions] = useState(false);
     const baseURL = 'https://www.googleapis.com/youtube/v3/search';
 
     useEffect(() => {
 
+        debugger;
         // Проверявам дали въобще има токен - ако няма го update-вам преди да го потърся няколко реда по надолу:
+
+
         if (!cookies.get('access_token') || cookies.get('access_token').length < 3) {
             updateAccessToken();
         }
@@ -59,7 +67,7 @@ const YouTubeSearch = ({
 
         // solve();
 
-        
+
 
         // SEARCH FROM - MongoDB:
 
@@ -72,8 +80,8 @@ const YouTubeSearch = ({
                 console.log(allSongsWithPattern.data);
                 let songs = allSongsWithPattern.data;
 
-                // Защото съм сложил ограниечение до 60 резултата:
-                if (songs.length <= 60) {
+                // Защото съм сложил ограниечение до 70 резултата:
+                if (songs.length <= 70) {
 
                     let processedSongs = [];
                     for (let i = 0; i < songs.length; i++) {
@@ -93,51 +101,71 @@ const YouTubeSearch = ({
     }, [searchTerm]);
 
 
+    const showOrHideOptionsHandler = (event) => {
+        const optionsList = event.target.nextElementSibling;
 
-    // ТОВА Е С API_KEY:
-    //------------------
-    // useEffect(() => {
-    //     if (searchTerm) {
-    //         axios.get(baseURL, {
-    //             params: {
-    //                 part: 'snippet',
-    //                 q: searchTerm,
-    //                 key: API_KEY, // Използвай API ключа тук
-    //                 type: 'video',
-    //                 maxResults: 5
-    //             }
-    //         })
-    //             .then(response => {
-    //                 console.log(response.data);
-    //                 setVideosHandler(response.data.items);
-    //             })
-    //             .catch(error => {
-    //                 console.error('Error fetching data: ', error);
-    //             });
-    //     }
-
-    // }, [searchTerm]);
-
+        if (optionsList.style.display === "none" || optionsList.style.display === "") {
+            optionsList.style.display = "block"; // Показва ul
+        } else {
+            optionsList.style.display = "none"; // Скрива ul
+        }
+    };
 
     return (
         <article className={style['songs-list']}>
             {videos.length > 0 ? (
-                videos.map((video) => (
+                videos.map((video, index) => (
                     <div
                         className={style['song-container']}
                         key={video.id.videoId}
-                        onClick={() => onVideoSelect(video.id.videoId)}
+                        onClick={() => {
+                            setSongIsPlayingHandler(true);
+                            onVideoSelect(video.id.videoId);
+                        }}
                     >
-                        <img
-                            className={style['song-image']}
-                            src={video.snippet.thumbnails.high.url}
-                            alt={video.snippet.title}
-                        />
+
+                        <div className={style['song-image-wrapp-container']}>
+                            <span className={style['song-black-shadow']}></span>
+                            <img
+                                className={style['song-image']}
+                                src={video.snippet.thumbnails.high.url}
+                                alt={video.snippet.title}
+                            />
+                        </div>
                         <h4 className={style['song-title']}>{video.snippet.title}</h4>
+
+                        <img
+                            onClick={showOrHideOptionsHandler}
+                            className={style['add-song-image']}
+                            src={addSongImage}
+                            alt="addSongImage"
+                        />
+
+                        <ul
+                            onMouseEnter={(event) => {
+                                event.stopPropagation();  // Спиране на propagation при hover (ако е необходимо)
+                            }}
+                            className={style['add-song-options']}
+                        >
+
+                            {playlistTypes.Харесани &&
+                                Object.keys(playlistTypes).map(type => {
+                                    return (
+                                        <li
+                                            data-value={index}
+                                            onClick={(event) => {
+                                                addSongToPlaylist(videos[index], type);
+                                            }}
+
+                                        >Добави в "{type}"..</li>
+                                    )
+                                })}
+                        </ul>
+
                     </div>
                 ))
             ) : (
-                <p>No videos found</p>
+                <h1>No videos found</h1>
             )}
         </article>
     );
