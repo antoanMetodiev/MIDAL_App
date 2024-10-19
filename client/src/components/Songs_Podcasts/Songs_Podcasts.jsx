@@ -33,6 +33,11 @@ const Songs_Podcasts = () => {
     const [selectedVideoId, setSelectedVideoId] = useState(null);
     const [videos, setVideos] = useState([]);
     const [showMoreOptions, setShowMoreOptions] = useState(false);
+    const [songIsPlaying, setSongIsPlaying] = useState(false);
+
+    function setSongIsPlayingHandler(value) {
+        setSongIsPlaying(value);
+    };
 
     const [iListenThisSong, setIListenThisSong] = useState({});
     const [myFriendsListens, setMyFriendsListens] = useState([]);
@@ -435,6 +440,7 @@ const Songs_Podcasts = () => {
                         onVideoSelect={handleVideoSelect}
                         addSongToPlaylist={addSongToPlaylist}
                         playlistTypes={playlistTypes}
+                        setSongIsPlayingHandler={setSongIsPlayingHandler}
                     />
                 ) : searchLocation == "Профили" ? (
                     <UserSearch searchTerm={searchTerm} />
@@ -450,6 +456,8 @@ const Songs_Podcasts = () => {
                     videoId={selectedVideoId}
                     handleVideoSelect={handleVideoSelect}
                     setIListenThisSongHandler={setIListenThisSongHandler}
+                    songIsPlaying={songIsPlaying}
+                    setSongIsPlayingHandler={setSongIsPlayingHandler}
                 />
 
             </article>
