@@ -2,6 +2,7 @@ const app = require('express')();
 
 const SongModel = require('../models/SongModel');
 const Video_Id_Model = require('../models/Video_Id_Model');
+const UserModel = require("../models/UserModel");
 
 // ТОЗИ URL - ТЪРСИ ОТ API:
 app.post('/create-songs', async (req, res) => {
@@ -63,6 +64,25 @@ app.post('/get-songs', async (req, res) => {
     }
 });
 
+app.post('/add-song-to-one-playlist', async (req, res) => {
+    const { song, playlistName, myId } = req.body;
 
+    try {
+        // Използваме $push за добавяне на новата песен в масива с песни на съответния плейлист
+        const newObject = await UserModel.findByIdAndUpdate(
+            myId,
+            {
+                $push: { [`myPlaylists.${playlistName}.songs`]: song }
+            },
+            { new: true }  // Връща актуализирания документ
+        );
+
+        return res.json({ obj: newObject });
+        
+    } catch (error) {
+        console.log('Възникна грешка при добавянето на песента.');
+        res.status(500).send({ message: 'Възникна грешка при добавянето на песента.' });
+    }
+});
 
 module.exports = app;
