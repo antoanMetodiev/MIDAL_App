@@ -34,6 +34,15 @@ const UserSchema = new mongoose.Schema({
     closeFriends: [{
         type: Object,
     }],
+    myPlaylists: {
+        type: Object,
+        default: {
+            Харесани: {
+                imgURL: "https://res.cloudinary.com/dxkloyfs1/image/upload/v1728853213/rusx9nxj3vuzb9yy5gt2.png",
+                songs: [],
+            },  // Дефолтна стойност за myPlaylists с ключ "Харесани" и празен масив
+        },
+    },
     myPublishedPlaylists: [{
         type: Object,
     }],
