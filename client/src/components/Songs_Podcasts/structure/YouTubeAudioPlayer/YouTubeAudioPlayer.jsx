@@ -6,22 +6,30 @@ import onLeft from "../../resources/images/left.png"
 import onRight from "../../resources/images/right.png"
 import playVideo from "../../resources/images/play.png";
 import pauseVideo from "../../resources/images/pause.png";
+import Songs_Podcasts from '../../Songs_Podcasts';
 
 const YouTubeAudioPlayer = ({
 	videoId,
 	handleVideoSelect,
 	videos,
 	setIListenThisSongHandler,
+	songIsPlaying,
+	setSongIsPlayingHandler,
 }) => {
-	const [songIsPlaying, setSongIsPlaying] = useState(false);
+
+	// This is actual music player/youtube player:
 	const [youtubePlayer, setYoutubePlayer] = useState(null);
 	const [volume, setVolume] = useState(50); // Начално ниво на звука - 50%
-	const [seekTime, setSeekTime] = useState(''); // Време за търсене
+	const [seekTime, setSeekTime] = useState(0); // Време за търсене
+	const [maxSeekTime, setMaxSeetTime] = useState(0);
+	const [currentTime, setCurrentTime] = useState(0); // Текущо време на песента
+
+	console.log(maxSeekTime)
+
 
 	// References (not actual refs who i use...):
 	const playerRef = useRef(null);
 	let player;
-
 
 	useEffect(() => {
 
@@ -37,24 +45,40 @@ const YouTubeAudioPlayer = ({
 				videoId: videoId,
 				playerVars: {
 					autoplay: 1, // Автоматично възпроизвеждане
-					// controls: 0, // Без контролите на YouTube
-					// modestbranding: 1, // Намален брандинг
+					controls: 0, // Без контролите на YouTube
+					showinfo: 0, // Без информация
+					rel: 0, // Без свързани видеа
+					cc_load_policy: 1, // Автоматично показване на субтитри
 				},
 				events: {
 					onReady: (event) => {
+						debugger;
 						event.target.setVolume(volume);
 						event.target.playVideo(); // Стартиране на видеото при готовност
 						// event.target.setPlaybackQuality('small'); // Задаване на качеството на видеото
 
+
+						console.log(event.target);
+						console.log(event.target.getDuration());
+
+						// Обновяване на текущото време на всяка секунда
+						// setInterval(() => {
+						// 	setCurrentTime(event.target.getCurrentTime());
+						// }, 1000);
+
+						debugger;
+
 						// Получаване на информация за видеото
 						const videoData = event.target.getVideoData();
-						
-						setIListenThisSongHandler(videoData); 
+
+						setMaxSeetTime(event.target.getDuration());
+						setSongIsPlaying(true);
+						setIListenThisSongHandler(videoData);
 					},
 					onStateChange: (event) => {
 						if (event.data === window.YT.PlayerState.ENDED) {
 
-							debugger;
+							// debugger;
 							let newVideoId = '';
 							const newSelectedVideo = videos[getRandomIndex(0, videos.length < 8 ? videos.length : 8)]
 							newVideoId = newSelectedVideo.id.videoId;
@@ -101,6 +125,7 @@ const YouTubeAudioPlayer = ({
 				if (videos[i].id.videoId == videoId) {
 					newVideoId = videos[i + 1].id.videoId;
 					handleVideoSelect(newVideoId);
+					setSongIsPlayingHandler(true);
 				}
 			};
 
@@ -111,17 +136,18 @@ const YouTubeAudioPlayer = ({
 				if (videos[i].id.videoId == videoId) {
 					newVideoId = videos[i - 1].id.videoId;
 					handleVideoSelect(newVideoId);
+					setSongIsPlayingHandler(true);
 				}
 			};
 
 		} else if (event.target.alt == 'pause') {
 			// debugger;
 			youtubePlayer.pauseVideo();
-			setSongIsPlaying(true);
+			setSongIsPlayingHandler(false);
 		} else if (event.target.alt == 'play') {
 			debugger;
 			youtubePlayer.playVideo();
-			setSongIsPlaying(false);
+			setSongIsPlayingHandler(true);
 		}
 	};
 
@@ -145,28 +171,42 @@ const YouTubeAudioPlayer = ({
 	};
 
 
-	 // Функция за регулиране на времето
-	 const handleSeekChange = (e) => {
-        setSeekTime(e.target.value); // Запазване на стойността на времето
-    };
+	// Функция за регулиране на времето
+	const handleSeekChange = (e) => {
+		debugger;
+		console.log(e.target.value);
+		setSeekTime(e.target.value);
+		seekToTime(e.target.value); // Запазване на стойността на времето
+	};
 
-    const seekToTime = () => {
-        const timeInSeconds = parseInt(seekTime); // Преобразуване на времето в секунди
-        if (!isNaN(timeInSeconds) && youtubePlayer) {
-            youtubePlayer.seekTo(timeInSeconds, true); // Преместване на плейъра
-        }
-    };
+	const seekToTime = () => {
+		const timeInSeconds = parseInt(seekTime); // Преобразуване на времето в секунди
+		if (!isNaN(timeInSeconds) && youtubePlayer) {
+			youtubePlayer.seekTo(timeInSeconds, true); // Преместване на плейъра
+		}
+	};
+
+	const songTimeControllInput = useRef(null);
+
+	console.log(youtubePlayer);
+
+
+	if (youtubePlayer && Object.keys(youtubePlayer).length > 1) {
+		console.log(Object.keys(youtubePlayer));
+		// console.log(youtubePlayer.getCurrentTime());
+	}
 
 
 	return (
 		<article>
 			{/* Actual thah is the Player: */}
-			<div ref={playerRef}></div>
+			<div className='my-video-mf-player' ref={playerRef}></div>
 
 			<div className={style['player-container']}>
 
 
 				<div className={style['volume-slider']}>
+
 					<input
 						type="range"
 						id="volume"
@@ -177,28 +217,34 @@ const YouTubeAudioPlayer = ({
 						onChange={handleVolumeChange}
 					/>
 				</div>
-
 				<div className={style['seek-container']}>
-					<label htmlFor="seekTime">Seek to (seconds):</label>
+					{maxSeekTime > 0 && (
+						<h3
+							style={{ color: "green" }}>
+							{youtubePlayer ? `${Math.floor(youtubePlayer.getCurrentTime() / 60)}:${Math.floor(youtubePlayer.getCurrentTime() % 60).toString().padStart(2, '0')}` : '0:00'}
+						</h3>
+					)}
 					<input
-						type="number"
+						ref={songTimeControllInput}
+						className={style['song-time-control']}
+						type="range"
 						id="seekTime"
 						name="seekTime"
+						min="0"
+						max={maxSeekTime} // Задаване на максималната стойност
 						value={seekTime}
 						onChange={handleSeekChange}
-						placeholder="Enter time in seconds"
 					/>
-					<button onClick={seekToTime}>Seek</button> {/* Бутон за търсене */}
 				</div>
 
 
 				<div className={style['arrows-container']}>
-					<img onClick={switchSong} className={style['onLeft']} src={onLeft} alt="left" />
+					<img onClick={switchSong} className={style['onLeft']} src={onRight} alt="left" />
 
 					{songIsPlaying ?
-						<img onClick={switchSong} className={style['play-video']} src={playVideo} alt="play" />
-						:
 						<img onClick={switchSong} className={style['pause-video']} src={pauseVideo} alt="pause" />
+						:
+						<img onClick={switchSong} className={style['play-video']} src={playVideo} alt="play" />
 					}
 					<img onClick={switchSong} className={style['onRight']} src={onRight} alt="right" />
 				</div>
