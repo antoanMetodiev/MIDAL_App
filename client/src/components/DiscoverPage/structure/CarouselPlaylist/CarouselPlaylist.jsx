@@ -13,9 +13,9 @@ const CarouselPlaylist = () => {
     const settings = {
         dots: true,
         infinite: true,
-        speed: 700,
+        speed: 800,
         slidesToShow: 3,
-        slidesToScroll: 1,
+        slidesToScroll: 3,
     };
 
     return (
