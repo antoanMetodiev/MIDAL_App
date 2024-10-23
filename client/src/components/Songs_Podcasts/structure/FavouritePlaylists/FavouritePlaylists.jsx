@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from "react";
 const FavouritePlaylists = ({
     playlistTypes,
     handleVideoSelect,
+    setCurrentListeningSongHandler,
 }) => {
 
     function showSongsFromPlaylistHandler(event) {
@@ -21,8 +22,10 @@ const FavouritePlaylists = ({
     }
 
     const sendToMusicPlayer = (event, playlistKey) => {
+        debugger;
         let songForListen = playlistTypes[playlistKey].songs[Number(event.target.alt)];
 
+        setCurrentListeningSongHandler(songForListen.data);
         handleVideoSelect(songForListen.videoId);
         // console.log();
         // console.log(playlistKey);
