@@ -9,6 +9,11 @@
     height: 100vh;
 }
 
+.search-form {
+    position: relative;
+    z-index: 2;
+}
+
 .search-engine {
     margin-bottom: 3em;
     position: relative;
@@ -70,7 +75,7 @@ span.black-shadow {
 
 .options-container {
     position: absolute;
-    z-index: 6;
+    z-index: 3;
     top: 1.8em;
     left: 41em;
     display: flex;
@@ -147,6 +152,7 @@ span.black-shadow {
 /* Song Container */
 .songs-list {
     position: absolute;
+    z-index: 3;
     top: 6em;
     left: 14em;
     width: 84%;
@@ -184,7 +190,7 @@ span.black-shadow {
     width: 14em;
     /* min-height: 15em;
     max-height: 18em; */
-    height: 14.8em;
+    height: 14.2em;
     text-align: center;
     padding: 20px;
     display: flex;
@@ -277,9 +283,10 @@ span.black-shadow {
 
 .song-image {
     width: 12em;
-    height: 7.5em;
+    height: 6.7em;
     object-fit: cover;
     border-radius: 1em;
+    margin-top: -1.2em;
 }
 
 
@@ -340,6 +347,19 @@ span.black-shadow {
     background-color: gray;
     cursor: pointer;
     border-radius: 1em;
+}
+
+.full-screen-image {
+    width: 1em;
+    position: absolute;
+    bottom: 0.43em;
+    left: 0.5em;
+    z-index: 9;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.8);
+}
+
+.full-screen-image:hover {
+    transform: scale(1.3);
 }
 
 
