@@ -1,7 +1,7 @@
 
 .main-container {
     position: fixed;
-    z-index: 2;
+    z-index: 4;
     top: 5.7em;
     right: 0.8em;
     height: 30em;
@@ -112,8 +112,8 @@
     bottom: 5em;
     right: 1em;
     width: 2.5em;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.9); /* Много силна черна сянка */
-    border-radius: 1em;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.95); /* Много силна черна сянка */
+    border-radius: 0.8em;
     background-color: #fefefe8c;
     padding: 1.5px;
 }
