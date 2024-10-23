@@ -6,7 +6,7 @@ import onLeft from "../../resources/images/left.png"
 import onRight from "../../resources/images/right.png"
 import playVideo from "../../resources/images/play.png";
 import pauseVideo from "../../resources/images/pause.png";
-import Songs_Podcasts from '../../Songs_Podcasts';
+import midalLogo from "../../resources/images/midal-logo.jpg";
 
 const YouTubeAudioPlayer = ({
 	videoId,
@@ -15,24 +15,33 @@ const YouTubeAudioPlayer = ({
 	setIListenThisSongHandler,
 	songIsPlaying,
 	setSongIsPlayingHandler,
+	setCurrentListeningSongHandler,
+	youtubePlayer,
+	setYoutubePlayer,
+	playerRef,
+	playerRefWrapper,
+	currentSongURL
 }) => {
-
-	// This is actual music player/youtube player:
-	const [youtubePlayer, setYoutubePlayer] = useState(null);
 	const [volume, setVolume] = useState(50); // Начално ниво на звука - 50%
 	const [seekTime, setSeekTime] = useState(0); // Време за търсене
 	const [maxSeekTime, setMaxSeetTime] = useState(0);
 	const [currentTime, setCurrentTime] = useState(0); // Текущо време на песента
 
-	console.log(maxSeekTime)
+	// References 
+	// const playerRef = useRef(null);
+	const up_WallRef = useRef(null);
+	const down_WallRef = useRef(null);
 
 
-	// References (not actual refs who i use...):
-	const playerRef = useRef(null);
 	let player;
-
 	useEffect(() => {
 
+		if (playerRefWrapper.current) {
+			playerRefWrapper.current.style.opacity = "0";
+			playerRefWrapper.current.style.zIndex = "1";
+		}
+
+		up_WallRef.current.style.display = "block";
 		// Инициализиране на плейъра при зареждане на видеото
 		const onYouTubeIframeAPIReady = () => {
 
@@ -40,25 +49,41 @@ const YouTubeAudioPlayer = ({
 			// Да сложа грамофонна плоча някъде докато се зарежда...
 
 			player = new window.YT.Player(playerRef.current, {
-				height: '0',  // Скрити размери
-				width: '0',
+				// height: '400px',
+				// width: '700px',
+				height: '350px',
+				width: '620px',
 				videoId: videoId,
 				playerVars: {
 					autoplay: 1, // Автоматично възпроизвеждане
-					controls: 0, // Без контролите на YouTube
-					showinfo: 0, // Без информация
-					rel: 0, // Без свързани видеа
+					controls: 0, // Премахване на контролите
+					rel: 0, // Без свързани видеа от други канали
 					cc_load_policy: 1, // Автоматично показване на субтитри
+					modestbranding: 1, // Намалява логото на YouTube
+					iv_load_policy: 3, // Без анотации и интерактивни елементи
+					fs: 0, // Без възможност за пълен екран
+					disablekb: 1, // Без клавишни контроли
+					playsinline: 1 // Пускане в "inline" режим на мобилни устройства
 				},
 				events: {
 					onReady: (event) => {
 						debugger;
+						up_WallRef.current.style.display = "block";
+						down_WallRef.current.style.display = "block";
 						event.target.setVolume(volume);
 						event.target.playVideo(); // Стартиране на видеото при готовност
 						// event.target.setPlaybackQuality('small'); // Задаване на качеството на видеото
 
+						for (let i = 0; i < videos.length; i++) {
+							if (videos[i].id.videoId == videoId) {
+								console.log(videos[i]);
+								setCurrentListeningSongHandler(videos[i]);
+							}
+						}
 
-						console.log(event.target);
+						console.log(event.target.getVideoUrl());
+						currentSongURL.current = event.target.getVideoUrl();
+
 						console.log(event.target.getDuration());
 
 						// Обновяване на текущото време на всяка секунда
@@ -71,11 +96,17 @@ const YouTubeAudioPlayer = ({
 						// Получаване на информация за видеото
 						const videoData = event.target.getVideoData();
 
+						setTimeout(() => {
+							up_WallRef.current.style.display = "none";
+							down_WallRef.current.style.display = "none";
+						}, 5000);
+
 						setMaxSeetTime(event.target.getDuration());
 						setSongIsPlaying(true);
 						setIListenThisSongHandler(videoData);
 					},
 					onStateChange: (event) => {
+
 						if (event.data === window.YT.PlayerState.ENDED) {
 
 							// debugger;
@@ -83,8 +114,36 @@ const YouTubeAudioPlayer = ({
 							const newSelectedVideo = videos[getRandomIndex(0, videos.length < 8 ? videos.length : 8)]
 							newVideoId = newSelectedVideo.id.videoId;
 
+							// up_WallRef.current.style.display = "block";
 							handleVideoSelect(newVideoId);
 						};
+
+						if (event.data === window.YT.PlayerState.PLAYING) {
+
+							// Видеото започна да се възпроизвежда, субтитрите трябва да са заредени
+							const availableTracks = event.target.getOption('captions', 'tracklist');
+
+							console.log(event.target.getOption());
+							console.log(availableTracks);
+
+							if (availableTracks) {
+								const preferredLanguages = ['en', 'bg']; // Английски, български и испански
+								const track = availableTracks.find(t => preferredLanguages.includes(t.languageCode));
+
+								if (track) {
+									// Задаваме субтитрите на намерения език
+									event.target.setOption('captions', 'track', {
+										languageCode: track.languageCode,
+										name: track.name
+									});
+								} else {
+									console.log('Няма налични субтитри на английски, български или испански.');
+								}
+							} else {
+								console.log('Субтитрите все още не са заредени.');
+							}
+						}
+
 					},
 					onError: (error) => {
 						console.error("Error playing video:", error);
@@ -106,7 +165,7 @@ const YouTubeAudioPlayer = ({
 			window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
 		}
 
-		// // Изчистване на плейъра при премахване на компонента
+		// // // Изчистване на плейъра при премахване на компонента
 		return () => {
 			if (player) {
 				player.destroy();
@@ -115,6 +174,37 @@ const YouTubeAudioPlayer = ({
 
 	}, [videoId]);
 
+
+
+	useEffect(() => {
+		document.addEventListener("keydown", onKeyDownHandler)
+		
+		function onKeyDownHandler(event) {
+			if (event.code === 'Space') {
+				event.preventDefault();
+				if (!songIsPlaying && youtubePlayer.videoTitle) {
+
+					youtubePlayer.playVideo();
+					setSongIsPlayingHandler(true);
+					setTimeout(() => {
+						down_WallRef.current.style.display = "none";
+						up_WallRef.current.style.display = "none";
+					}, 1000);
+
+				} else {
+					youtubePlayer.pauseVideo();
+					setSongIsPlayingHandler(false);
+					up_WallRef.current.style.display = "block";
+					down_WallRef.current.style.display = "block";
+				}
+			}
+		}
+
+		return () => {
+			document.removeEventListener("keydown", onKeyDownHandler);
+		}
+
+	}, [youtubePlayer, songIsPlaying]);
 
 	function switchSong(event) {
 		let newVideoId = '';
@@ -144,10 +234,16 @@ const YouTubeAudioPlayer = ({
 			// debugger;
 			youtubePlayer.pauseVideo();
 			setSongIsPlayingHandler(false);
+			up_WallRef.current.style.display = "block";
+			down_WallRef.current.style.display = "block";
 		} else if (event.target.alt == 'play') {
 			debugger;
 			youtubePlayer.playVideo();
 			setSongIsPlayingHandler(true);
+			setTimeout(() => {
+				down_WallRef.current.style.display = "none";
+				up_WallRef.current.style.display = "none";
+			}, 1000);
 		}
 	};
 
@@ -179,31 +275,41 @@ const YouTubeAudioPlayer = ({
 		seekToTime(e.target.value); // Запазване на стойността на времето
 	};
 
-	const seekToTime = () => {
-		const timeInSeconds = parseInt(seekTime); // Преобразуване на времето в секунди
+	const seekToTime = (time) => {
+		const timeInSeconds = parseInt(time); // Преобразуване на времето в секунди
 		if (!isNaN(timeInSeconds) && youtubePlayer) {
 			youtubePlayer.seekTo(timeInSeconds, true); // Преместване на плейъра
 		}
 	};
 
-	const songTimeControllInput = useRef(null);
-
-	console.log(youtubePlayer);
-
-
-	if (youtubePlayer && Object.keys(youtubePlayer).length > 1) {
-		console.log(Object.keys(youtubePlayer));
-		// console.log(youtubePlayer.getCurrentTime());
-	}
 
 
 	return (
 		<article>
-			{/* Actual thah is the Player: */}
-			<div className='my-video-mf-player' ref={playerRef}></div>
+			{/* Actual that is the Player: */}
+
+			<div
+				className={style['player-ref-wrapper']}
+				ref={playerRefWrapper}
+			>
+
+				<div
+					style={{ position: "relative", left: "10em", zIndex: "20", borderRadius: "2em" }}
+					className='my-video-mf-player' ref={playerRef}
+				>
+				</div>
+
+				<div ref={up_WallRef} className={style['up-wall']}></div>
+				<div ref={down_WallRef} className={style['down-wall']}></div>
+				<div className={style['right-wall']}>
+					{/* <img className={style['site-little-logo']} src={midalLogo} alt="midalLogo" /> */}
+				</div>
+				<div className={style['internal-sheel']}></div>
+			</div>
+
+
 
 			<div className={style['player-container']}>
-
 
 				<div className={style['volume-slider']}>
 
@@ -218,14 +324,14 @@ const YouTubeAudioPlayer = ({
 					/>
 				</div>
 				<div className={style['seek-container']}>
-					{maxSeekTime > 0 && (
+					{/* {maxSeekTime > 0 && (
 						<h3
 							style={{ color: "green" }}>
 							{youtubePlayer ? `${Math.floor(youtubePlayer.getCurrentTime() / 60)}:${Math.floor(youtubePlayer.getCurrentTime() % 60).toString().padStart(2, '0')}` : '0:00'}
 						</h3>
-					)}
+					)} */}
+
 					<input
-						ref={songTimeControllInput}
 						className={style['song-time-control']}
 						type="range"
 						id="seekTime"
@@ -252,6 +358,8 @@ const YouTubeAudioPlayer = ({
 		</article>
 	);
 };
+
+
 
 function getRandomIndex(min, max) {
 	min = Math.ceil(min);
