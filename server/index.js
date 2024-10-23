@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 const express = require('express');
 const app = express();
 const cors = require('cors');
@@ -20,73 +18,11 @@ app.use(express.json()); // Позволява на Express да обработ�
 app.use(cookieParser());
 app.use(routes);
 
-
 app.get('/api', (req, res) => {
     res.json({ message: 'Service is running successfully!' });
 });
 
 const mongoURL = 'mongodb://localhost:27017/midal';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 mongoose.connect(mongoURL)
     .then(() => {
         console.log('MongoDB is started!!!');
@@ -98,4 +34,3 @@ mongoose.connect(mongoURL)
     .catch((err) => {
         console.log(err);
     });
-

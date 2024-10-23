@@ -8,6 +8,9 @@ import cookies from "js-cookie";
 
 import updateAccessToken from "../../../GoogleAuth/utils/updateAccessToken";
 import addSongImage from "../../resources/images/add-song.png"
+import fullScreen from "../../resources/images/full_screen.png";
+
+import SongDetails from "./structure/SongDetails/SongDetails";
 
 const YouTubeSearch = ({
     searchTerm,
@@ -17,8 +20,18 @@ const YouTubeSearch = ({
     addSongToPlaylist,
     playlistTypes,
     setSongIsPlayingHandler,
+    currentListeningSong,
+    youtubePlayer,
+    setYoutubePlayer,
+    setCurrentListeningSongHandler,
+    playerRef,
+    playerRefWrapper,
+    songsListRef,
+    currentSongURL,
 }) => {
-    const [showOrHideOptions, setShowOrHideOptions] = useState(false);
+    const [showSongDetails, setShowSongDetails] = useState(false);
+
+    // const [showOrHideOptions, setShowOrHideOptions] = useState(false);
     const baseURL = 'https://www.googleapis.com/youtube/v3/search';
 
     useEffect(() => {
@@ -111,18 +124,42 @@ const YouTubeSearch = ({
         }
     };
 
+
+    function setSongDetailsHandler(value) {
+        setShowSongDetails(value);
+    }
+
+
+
     return (
-        <article className={style['songs-list']}>
+        <article
+            ref={songsListRef} 
+            className={style['songs-list']}
+        >
             {videos.length > 0 ? (
                 videos.map((video, index) => (
+
                     <div
                         className={style['song-container']}
                         key={video.id.videoId}
                         onClick={() => {
                             setSongIsPlayingHandler(true);
                             onVideoSelect(video.id.videoId);
+
+                            
                         }}
                     >
+                        <img onClick={() => {
+                            debugger;
+                            setSongIsPlayingHandler(true);
+                            onVideoSelect(video.id.videoId);
+
+                            setSongDetailsHandler(true);
+
+                            const newSong = videos.filter(el => el.id.videoId == video.id.videoId)[0];
+                            setCurrentListeningSongHandler(newSong);
+
+                        }} className={style['full-screen-image']} src={fullScreen} alt="fullScreen" />
 
                         <div className={style['song-image-wrapp-container']}>
                             <span className={style['song-black-shadow']}></span>
@@ -163,10 +200,28 @@ const YouTubeSearch = ({
                         </ul>
 
                     </div>
+
                 ))
             ) : (
                 <h1>No videos found</h1>
             )}
+
+
+
+            {showSongDetails && (
+                <SongDetails
+                    currentListeningSong={currentListeningSong}
+                    youtubePlayer={youtubePlayer}
+                    setYoutubePlayer={setYoutubePlayer}
+                    setSongDetailsHandler={setSongDetailsHandler}
+                    playerRef={playerRef}
+                    playerRefWrapper={playerRefWrapper}
+                    songsListRef={songsListRef}
+                    currentSongURL={currentSongURL}
+                />
+            )}
+
+
         </article>
     );
 };
