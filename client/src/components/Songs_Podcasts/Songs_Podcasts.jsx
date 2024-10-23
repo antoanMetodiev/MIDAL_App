@@ -34,6 +34,20 @@ const Songs_Podcasts = () => {
     const [videos, setVideos] = useState([]);
     const [showMoreOptions, setShowMoreOptions] = useState(false);
     const [songIsPlaying, setSongIsPlaying] = useState(false);
+    const [youtubePlayer, setYoutubePlayer] = useState(null);
+    const [currentListeningSong, setCurrentListeningSong] = useState({});
+
+
+    // References:
+    const playerRefWrapper = useRef(null);
+    const playerRef = useRef(null);
+    const songsListRef = useRef(null);
+    const currentSongURL = useRef("");
+   
+
+    function setCurrentListeningSongHandler(newListeningSong) {
+        setCurrentListeningSong(newListeningSong);
+    }
 
     function setSongIsPlayingHandler(value) {
         setSongIsPlaying(value);
@@ -46,6 +60,7 @@ const Songs_Podcasts = () => {
     const [playlistTypes, setPlaylistTypes] = useState({});
 
     useEffect(() => {
+
         if (myUserData.myPlaylists) {
             console.log(myUserData.myPlaylists);
             setPlaylistTypes(myUserData.myPlaylists);
@@ -329,8 +344,13 @@ const Songs_Podcasts = () => {
 
     const handleSearch = (e) => {
         // debugger;
-        e.preventDefault();
-        setSearchTerm(e.target.search_engine.value);
+        
+        if (e) {
+            e.preventDefault();
+            setSearchTerm(e.target.search_engine.value);
+        } else {
+            setSearchTerm(searchEngineRef.current.value);
+        }
     };
 
     const handleVideoSelect = (videoId) => {
@@ -415,8 +435,10 @@ const Songs_Podcasts = () => {
 
                 <ListeningFriends myFriendsListens={myFriendsListens} />
 
-
-                <form onSubmit={handleSearch}>
+                <form
+                    className={style['search-form']} 
+                    onSubmit={handleSearch}
+                >
                     <input
                         ref={searchEngineRef}
                         className={style['search-engine']}
@@ -428,9 +450,14 @@ const Songs_Podcasts = () => {
                     <img
                         className={style['search-button']}
                         src={searchButton}
+                        onClick={() => {
+                            handleSearch();
+                        }}
                         alt="searchButton"
                     />
                 </form>
+
+
 
                 {searchLocation == "Музика & Подкасти" ? (
                     <YouTubeSearch
@@ -441,6 +468,14 @@ const Songs_Podcasts = () => {
                         addSongToPlaylist={addSongToPlaylist}
                         playlistTypes={playlistTypes}
                         setSongIsPlayingHandler={setSongIsPlayingHandler}
+                        currentListeningSong={currentListeningSong}
+                        setCurrentListeningSongHandler={setCurrentListeningSongHandler}
+                        youtubePlayer={youtubePlayer}
+                        setYoutubePlayer={setYoutubePlayer}
+                        playerRef={playerRef}
+                        playerRefWrapper={playerRefWrapper}
+                        songsListRef={songsListRef}
+                        currentSongURL={currentSongURL}
                     />
                 ) : searchLocation == "Профили" ? (
                     <UserSearch searchTerm={searchTerm} />
@@ -458,6 +493,12 @@ const Songs_Podcasts = () => {
                     setIListenThisSongHandler={setIListenThisSongHandler}
                     songIsPlaying={songIsPlaying}
                     setSongIsPlayingHandler={setSongIsPlayingHandler}
+                    setCurrentListeningSongHandler={setCurrentListeningSongHandler}
+                    youtubePlayer={youtubePlayer}
+                    setYoutubePlayer={setYoutubePlayer}
+                    playerRef={playerRef}
+                    playerRefWrapper={playerRefWrapper}
+                    currentSongURL={currentSongURL}
                 />
 
             </article>
@@ -465,7 +506,8 @@ const Songs_Podcasts = () => {
 
             <FavouritePlaylists 
                 playlistTypes={playlistTypes} 
-                handleVideoSelect={handleVideoSelect} 
+                handleVideoSelect={handleVideoSelect}
+                setCurrentListeningSongHandler={setCurrentListeningSongHandler}
             />
 
         </article>
