@@ -8,6 +8,7 @@ import RequestSongOrPodcast from "./structure/RequestSongOrPodcast/RequestSongOr
 import UserDetails from "./structure/UserDetails/UserDetails";
 import ListeningFriends from "./structure/ListeningFriends/ListeningFriends";
 import FavouritePlaylists from "./structure/FavouritePlaylists/FavouritePlaylists";
+import SongDetails from "./structure/YouTubeSearch/structure/SongDetails/SongDetails";
 
 import backImage from "./resources/images/monkey.png";
 import siteLogo from "./resources/images/midal-logo.jpg";
@@ -26,7 +27,9 @@ import io from 'socket.io-client';
 const socket = io('http://localhost:8090'); // Свързване към Socket.io сървъра
 
 const Songs_Podcasts = () => {
+    // States:
     const location = useLocation();
+    const under_black_shadow = useRef(null);
     const [myUserData, setMyUserData] = useState({});
     const [searchTerm, setSearchTerm] = useState('');
     const [searchLocation, setSearchLocation] = useState("Музика & Подкасти");
@@ -36,15 +39,29 @@ const Songs_Podcasts = () => {
     const [songIsPlaying, setSongIsPlaying] = useState(false);
     const [youtubePlayer, setYoutubePlayer] = useState(null);
     const [currentListeningSong, setCurrentListeningSong] = useState({});
+    const [iListenThisSong, setIListenThisSong] = useState({});
+    const [myFriendsListens, setMyFriendsListens] = useState([]);
 
+    // PLAYLIST TYPES:
+    const [playlistTypes, setPlaylistTypes] = useState({});
+
+    const [showSongDetails, setShowSongDetails] = useState(false);
+    function setSongDetailsHandler(value) {
+        setShowSongDetails(value);
+    }
 
     // References:
     const playerRefWrapper = useRef(null);
     const playerRef = useRef(null);
     const songsListRef = useRef(null);
     const currentSongURL = useRef("");
-   
+    const songsAndPodcastsH3 = useRef(null);
+    const userProfilesH3 = useRef(null);
+    const searchEngineRef = useRef(null);
+    const requestNewSongH3 = useRef(null);
+    const userDetailsH3 = useRef(null);
 
+    // Functions:
     function setCurrentListeningSongHandler(newListeningSong) {
         setCurrentListeningSong(newListeningSong);
     }
@@ -53,19 +70,17 @@ const Songs_Podcasts = () => {
         setSongIsPlaying(value);
     };
 
-    const [iListenThisSong, setIListenThisSong] = useState({});
-    const [myFriendsListens, setMyFriendsListens] = useState([]);
+    function setMyUserDataHandler(newUserData) {
+        setMyUserData(newUserData);
+    }
 
-    // PLAYLIST TYPES:
-    const [playlistTypes, setPlaylistTypes] = useState({});
 
     useEffect(() => {
-
         if (myUserData.myPlaylists) {
             console.log(myUserData.myPlaylists);
             setPlaylistTypes(myUserData.myPlaylists);
         }
-        
+
     }, [myUserData]);
 
 
@@ -90,7 +105,7 @@ const Songs_Podcasts = () => {
             const addSongForConcretePlaylist = async () => {
                 const response = await axios.post('http://localhost:8080/add-song-to-one-playlist', { song: songObjectForSave, playlistName: playlistName, myId: myUserData._id });
                 if (response.data.obj) {
-                    let newUserObject = {...myUserData};
+                    let newUserObject = { ...myUserData };
                     debugger;
                     newUserObject.myPlaylists[playlistName].songs.push(songObjectForSave);
                     localStorage.setItem("MIDAL_USER", JSON.stringify(newUserObject));
@@ -108,12 +123,6 @@ const Songs_Podcasts = () => {
         console.log(playlistName);
     };
 
-    // References:
-    const songsAndPodcastsH3 = useRef(null);
-    const userProfilesH3 = useRef(null);
-    const searchEngineRef = useRef(null);
-    const requestNewSongH3 = useRef(null);
-    const userDetailsH3 = useRef(null);
 
 
     useEffect(() => {
@@ -344,7 +353,7 @@ const Songs_Podcasts = () => {
 
     const handleSearch = (e) => {
         // debugger;
-        
+
         if (e) {
             e.preventDefault();
             setSearchTerm(e.target.search_engine.value);
@@ -436,7 +445,7 @@ const Songs_Podcasts = () => {
                 <ListeningFriends myFriendsListens={myFriendsListens} />
 
                 <form
-                    className={style['search-form']} 
+                    className={style['search-form']}
                     onSubmit={handleSearch}
                 >
                     <input
@@ -476,6 +485,7 @@ const Songs_Podcasts = () => {
                         playerRefWrapper={playerRefWrapper}
                         songsListRef={songsListRef}
                         currentSongURL={currentSongURL}
+                        setSongDetailsHandler={setSongDetailsHandler}
                     />
                 ) : searchLocation == "Профили" ? (
                     <UserSearch searchTerm={searchTerm} />
@@ -485,6 +495,19 @@ const Songs_Podcasts = () => {
                     <UserDetails />
                 )}
 
+                {showSongDetails && (
+                    <SongDetails
+                        currentListeningSong={currentListeningSong}
+                        youtubePlayer={youtubePlayer}
+                        setYoutubePlayer={setYoutubePlayer}
+                        setSongDetailsHandler={setSongDetailsHandler}
+                        playerRef={playerRef}
+                        playerRefWrapper={playerRefWrapper}
+                        songsListRef={songsListRef}
+                        currentSongURL={currentSongURL}
+                        under_black_shadow={under_black_shadow}
+                    />
+                )}
 
                 <YouTubeAudioPlayer
                     videos={videos}
@@ -499,15 +522,18 @@ const Songs_Podcasts = () => {
                     playerRef={playerRef}
                     playerRefWrapper={playerRefWrapper}
                     currentSongURL={currentSongURL}
+                    under_black_shadow={under_black_shadow}
                 />
 
             </article>
 
 
-            <FavouritePlaylists 
-                playlistTypes={playlistTypes} 
+            <FavouritePlaylists
+                playlistTypes={playlistTypes}
                 handleVideoSelect={handleVideoSelect}
                 setCurrentListeningSongHandler={setCurrentListeningSongHandler}
+                myUserData={myUserData}
+                setMyUserDataHandler={setMyUserDataHandler}
             />
 
         </article>
