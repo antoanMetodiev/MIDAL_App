@@ -3,7 +3,7 @@
     height: 100vh;
     width: 12em;
     position: fixed;
-    z-index: 5;
+    z-index: 7;
     /* Фиксира изображението на фона */
     top: 0;
     /* Започва от горния край на екрана */
@@ -70,23 +70,43 @@
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
 }
 
+.all-playlists-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    margin-top: 18px;
+    justify-content: flex-start;
+    /* За да започват от началото */
+    height: 16em;
+    /* Зададена височина */
+    padding-bottom: 5px;
+
+    /* Скрол настройка */
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 16em;
+    /* максималната височина на контейнера */
+}
 
 .liked-songs {
-    margin-top: 18px;
     display: flex;
     color: #fefefeca;
     display: flex;
     gap: 12px;
     align-items: center;
-    border-radius: 0.5em;
     padding: 2px;
     background-color: #fefefe35;
     transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     position: relative;
+
+    /* За предотвратяване на свиването на елемента */
+    flex-shrink: 0;
+    width: 100%;
+    border-radius: 1em;
 }
 
-.liked-songs > div {
+.liked-songs>div {
     margin-right: 0.9em;
 }
 
@@ -125,22 +145,39 @@
     width: 1.6em;
     align-items: flex-end;
     margin-top: 0.4em;
+    position: absolute;
+    right: 5px;
 }
 
 .playlist-songs-container {
     display: none;
     position: absolute;
-    margin-top: 16em;
-    height: 13em;
-    width: 98%;
+    margin-top: 16.8em;
+    height: 14em;
+    width: 100%;
+    padding: 2px 0px 0px 2px;
+    margin-left: -2px;
     background-color: rgba(128, 128, 128, 0.785);
-    border-bottom-left-radius: 1em;
-    border-bottom-right-radius: 1em;
     overflow-y: auto;
+    flex-direction: column;
+    gap: 1em;
+    /* Анимация при рендериране */
+    animation: slideInFromLeft 0.5s ease-out forwards;
+}
+
+/* Дефиниция на анимацията */
+@keyframes slideInFromLeft {
+    from {
+        transform: translateX(-100%); /* Започва извън екрана */
+        opacity: 0; /* Прозрачен в началото */
+    }
+    to {
+        transform: translateX(0); /* Позиция на оригиналното място */
+        opacity: 1; /* Напълно видим */
+    }
 }
 
 .song-container {
-    padding: 5px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -164,9 +201,160 @@ span.song-title {
     position: absolute;
     right: 3.9em;
     top: 1.3em;
-    transition: transform 0.3s ease; /* Плавен преход за трансформацията */
+    transition: transform 0.3s ease;
+    /* Плавен преход за трансформацията */
 }
 
 .play-song-image:hover {
-    transform: scale(1.13); /* Увеличаване с 20% при hover */
+    transform: scale(1.13);
+    /* Увеличаване с 20% при hover */
+}
+
+.playlist-h2-and-img-container {
+    display: flex;
+    gap: 1em;
+    align-items: center;
+    margin-left: 1px;
+    margin-top: -0.6em;
+}
+
+.playlist-h2-and-img-container>img {
+    width: 1.7em;
+    height: 1.7em;
+}
+
+/* WANT-TO-ADD-PLAYLIST-FORM: */
+
+.want-to-add-playlist-form {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    height: 8em;
+    margin-bottom: -2.5em;
+    margin-top: 1.4em;
+}
+
+.want-to-add-playlist-form label {
+    color: #ffffffd6;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 400;
+    font-size: 0.9em;
+    margin: 1px 0px 2px 8px;
+}
+
+.want-to-add-playlist-form input:first-of-type {
+    border-radius: 1em;
+    margin-left: 2px;
+    width: 10em;
+    padding: 1px 5px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: #ffffffd6;
+}
+
+.want-to-add-playlist-form input:nth-of-type(2) {
+    width: 2em;
+    height: 2em;
+    position: relative;
+    z-index: 2;
+    opacity: 0;
+}
+
+.want-to-add-playlist-form button {
+    position: relative;
+    top: -5.4em;
+    min-width: 4em;
+    max-width: 5em;
+    border-radius: 2em;
+    border: none;
+    background-color: #ffffffa4;
+    margin: 5px 0px 0px 5.5px;
+    padding: 2px 2px;
+    color: #000000c7;
+    font-weight: 500;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    transition: transform 0.4s ease;
+}
+
+.want-to-add-playlist-form button:hover {
+    transform: scale(1.05);
+    /* Увеличение на img при ховър на input */
+}
+
+.no-name-and-image {
+    display: none;
+    margin: 7px 0px 0px 2px;
+    color: rgba(255, 0, 0, 0.763);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 0.9em;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Черна сянка */
+}
+
+.icons-container {
+    display: flex;
+    flex-direction: column;
+    background-color: gray;
+    width: 3em;
+    height: 6em;
+    justify-content: center;
+    position: relative;
+    right: -8.8em;
+    top: -2.5em;
+    overflow: auto;
+    border-radius: 0.5em;
+    gap: 5px;
+    padding-top: 5.8em;
+    padding-bottom: 0.3em;
+    padding-left: 2px;
+
+    /* Стилове за Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: black transparent;
+
+}
+
+.icons-container img {
+    object-fit: cover;
+    width: 1.9em;
+    transition: transform 0.3s ease;
+    /* Плавен преход за зума */
+}
+
+.icons-container img:hover {
+    transform: scale(1.1);
+    /* Лек zoom ефект */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 1em;
+}
+
+.choosen-image {
+    width: 1.9em;
+    position: absolute;
+    top: 20em;
+    right: 4.7em;
+    box-shadow: 0 0 10px white;
+    /* Бял box-shadow */
+    border-radius: 0.5em;
+}
+
+
+
+/* Стилове за Webkit браузъри (Chrome, Safari) */
+.icons-container::-webkit-scrollbar {
+    width: 1px;
+    /* Ширина на скрол бара */
+}
+
+.icons-container::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.758);
+    /* Цвят на скрол бара */
+    border-radius: 1px;
+    /* Закръглени краища */
+}
+
+.icons-container::-webkit-scrollbar-track {
+    background: transparent;
+    /* Фон на пистата на скрол бара */
+    width: 1px;
+    /* Ширина на скрол бара */
 }
