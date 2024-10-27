@@ -28,8 +28,10 @@ const YouTubeSearch = ({
     playerRefWrapper,
     songsListRef,
     currentSongURL,
+    setSongDetailsHandler,
+    under_black_shadow,
 }) => {
-    const [showSongDetails, setShowSongDetails] = useState(false);
+
 
     // const [showOrHideOptions, setShowOrHideOptions] = useState(false);
     const baseURL = 'https://www.googleapis.com/youtube/v3/search';
@@ -125,15 +127,9 @@ const YouTubeSearch = ({
     };
 
 
-    function setSongDetailsHandler(value) {
-        setShowSongDetails(value);
-    }
-
-
-
     return (
         <article
-            ref={songsListRef} 
+            ref={songsListRef}
             className={style['songs-list']}
         >
             {videos.length > 0 ? (
@@ -146,7 +142,7 @@ const YouTubeSearch = ({
                             setSongIsPlayingHandler(true);
                             onVideoSelect(video.id.videoId);
 
-                            
+
                         }}
                     >
                         <img onClick={() => {
@@ -208,7 +204,7 @@ const YouTubeSearch = ({
 
 
 
-            {showSongDetails && (
+            {/* {showSongDetails && (
                 <SongDetails
                     currentListeningSong={currentListeningSong}
                     youtubePlayer={youtubePlayer}
@@ -219,7 +215,7 @@ const YouTubeSearch = ({
                     songsListRef={songsListRef}
                     currentSongURL={currentSongURL}
                 />
-            )}
+            )} */}
 
 
         </article>

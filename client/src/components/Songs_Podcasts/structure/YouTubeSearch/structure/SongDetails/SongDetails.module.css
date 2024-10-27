@@ -2,47 +2,49 @@
 
 .song-details-container {
     position: fixed;
-    z-index: 32;
+    z-index: 6;
     height: 100vh;
     width: 100vw;
     top: -10em;
     left: -10em;
-    margin-left: -1em;
-    background-color: gray;
+    margin-left: -1em; 
 }
 
 .video-title {
+    text-shadow: 2px 2px 4px black;
     position: absolute;
     z-index: 40;
-    left: 10em;
-    top: 19em;
+    left: 16em;
+    bottom: -3.2em;
     color: #ffffff9b;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 .subtitles-text {
+    text-shadow: 2px 2px 4px black;
     display: block;
     width: 29.5em;
-    height: 40em;
+    height: 35em;
     padding-right: 3em;
     overflow: auto;
     color: #ffffffd5;
     position: absolute;
-    z-index: 40;
-    top: 4em;
-    right: 1em;
+    z-index: 4;
+    top: 10.5em;
+    right: -11em;
     font-size: 1.1em;
-    line-height: 2.8;
+    line-height: 2.9;
     font-weight: 400;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
     letter-spacing: 2px;
+    font-style: italic;
 }
 
 .back-to-songList {
     position: absolute;
     z-index: 40;
-    bottom: 2em;
-    left: 10em;
-    width: 3em;
+    top: 11em;
+    left: 24.4em;
+    width: 2.5em;
 }
