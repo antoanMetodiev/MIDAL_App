@@ -53,7 +53,6 @@ app.post('/login', async (req, res) => {
     }
 });
 
-
 cloudinary.config({
     cloud_name: "dxkloyfs1",
     api_key: "451468329116552",

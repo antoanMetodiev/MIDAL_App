@@ -57,7 +57,7 @@ app.post('/get-songs', async (req, res) => {
             songName: { $regex: title, $options: 'i' } // 'i' е за нечуствителност към главни и малки букви
         }).limit(60);
 
-        res.status(200).json(results); 
+        res.status(200).json(results);
     } catch (error) {
         console.error('Error finding songs:', error);
         res.status(500).send('Error finding songs');  // Връщаме грешка при неуспех
@@ -78,10 +78,39 @@ app.post('/add-song-to-one-playlist', async (req, res) => {
         );
 
         return res.json({ obj: newObject });
-        
+
     } catch (error) {
         console.log('Възникна грешка при добавянето на песента.');
         res.status(500).send({ message: 'Възникна грешка при добавянето на песента.' });
+    }
+});
+
+
+app.post("/create-playlist", async (req, res) => {
+
+    try {
+        const { playlistForCreate } = req.body;
+        const playlistName = playlistForCreate.playlistName; // Името на новия плейлист
+        const playlistImage = playlistForCreate.playlistImage; // URL на изображението
+        const myId = playlistForCreate.myId;
+
+        // Създайте структурата на новия плейлист
+        const newPlaylist = {
+            imgURL: playlistImage,
+            songs: [], // Празен масив за песни, добавете логика, ако има такива
+        };
+
+        // Актуализиране на потребителя с новия плейлист като ново свойство в `myPlaylists`
+        const newUserData = await UserModel.findByIdAndUpdate(
+            myId,
+            { $set: { [`myPlaylists.${playlistName}`]: newPlaylist } },
+            { new: true }
+        );
+
+        return res.json({ newUserData: newUserData });
+    } catch (error) {
+        console.error("Грешка при създаване на плейлист:", error);
+        return res.status(500).json({ message: "Грешка при създаване на плейлист." });
     }
 });
 
