@@ -8,6 +8,8 @@ import playVideo from "../../resources/images/play.png";
 import pauseVideo from "../../resources/images/pause.png";
 import midalLogo from "../../resources/images/midal-logo.jpg";
 
+import gramophoneRecordImg from "../../resources/images/record-1.png";
+
 const YouTubeAudioPlayer = ({
 	videoId,
 	handleVideoSelect,
@@ -20,8 +22,10 @@ const YouTubeAudioPlayer = ({
 	setYoutubePlayer,
 	playerRef,
 	playerRefWrapper,
-	currentSongURL
+	currentSongURL,
+	under_black_shadow,
 }) => {
+	const [renderComponent, setRenderComponent] = useState(false);
 	const [volume, setVolume] = useState(50); // Начално ниво на звука - 50%
 	const [seekTime, setSeekTime] = useState(0); // Време за търсене
 	const [maxSeekTime, setMaxSeetTime] = useState(0);
@@ -58,7 +62,7 @@ const YouTubeAudioPlayer = ({
 					autoplay: 1, // Автоматично възпроизвеждане
 					controls: 0, // Премахване на контролите
 					rel: 0, // Без свързани видеа от други канали
-					cc_load_policy: 1, // Автоматично показване на субтитри
+					// cc_load_policy: 1, // Автоматично показване на субтитри
 					modestbranding: 1, // Намалява логото на YouTube
 					iv_load_policy: 3, // Без анотации и интерактивни елементи
 					fs: 0, // Без възможност за пълен екран
@@ -99,7 +103,7 @@ const YouTubeAudioPlayer = ({
 						setTimeout(() => {
 							up_WallRef.current.style.display = "none";
 							down_WallRef.current.style.display = "none";
-						}, 5000);
+						}, 5500);
 
 						setMaxSeetTime(event.target.getDuration());
 						setSongIsPlaying(true);
@@ -177,39 +181,53 @@ const YouTubeAudioPlayer = ({
 
 
 	useEffect(() => {
-		document.addEventListener("keydown", onKeyDownHandler)
-		
-		function onKeyDownHandler(event) {
+		const onKeyDownHandler = (event) => {
 			if (event.code === 'Space') {
-				event.preventDefault();
-				if (!songIsPlaying && youtubePlayer.videoTitle) {
+				const activeEl = document.activeElement;
+				const isInputFocused = activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA';
 
-					youtubePlayer.playVideo();
-					setSongIsPlayingHandler(true);
-					setTimeout(() => {
-						down_WallRef.current.style.display = "none";
-						up_WallRef.current.style.display = "none";
-					}, 1000);
+				// Ако фокусът е върху input или textarea, не предотвратяваме поведението
+				if (!isInputFocused) {
+					event.preventDefault(); // Предотвратяваме скролване или други действия със Spacebar
 
-				} else {
-					youtubePlayer.pauseVideo();
-					setSongIsPlayingHandler(false);
-					up_WallRef.current.style.display = "block";
-					down_WallRef.current.style.display = "block";
+					if (!songIsPlaying && youtubePlayer.videoTitle && activeEl) {
+						youtubePlayer.playVideo();
+						setSongIsPlayingHandler(true);
+
+						// Скриваме елементите след 1 секунда
+						setTimeout(() => {
+							if (down_WallRef.current && up_WallRef.current) {
+								down_WallRef.current.style.display = "none";
+								up_WallRef.current.style.display = "none";
+							}
+						}, 1000);
+					} else {
+						youtubePlayer.pauseVideo();
+						setSongIsPlayingHandler(false);
+
+						if (down_WallRef.current && up_WallRef.current) {
+							up_WallRef.current.style.display = "block";
+							down_WallRef.current.style.display = "block";
+						}
+					}
 				}
 			}
-		}
+		};
 
+		// Добавяме слушател за натискане на клавиши
+		document.addEventListener("keydown", onKeyDownHandler);
+
+		// Премахваме слушателя при демонтиране на компонента
 		return () => {
 			document.removeEventListener("keydown", onKeyDownHandler);
-		}
-
+		};
 	}, [youtubePlayer, songIsPlaying]);
 
 	function switchSong(event) {
 		let newVideoId = '';
 
 		if (event.target.alt == 'right') {
+			setSeekTime(0);
 			for (let i = 0; i < videos.length; i++) {
 
 				if (videos[i].id.videoId == videoId) {
@@ -221,6 +239,7 @@ const YouTubeAudioPlayer = ({
 
 		} else if (event.target.alt == 'left') {
 
+			setSeekTime(0);
 			for (let i = 0; i < videos.length; i++) {
 
 				if (videos[i].id.videoId == videoId) {
@@ -243,7 +262,7 @@ const YouTubeAudioPlayer = ({
 			setTimeout(() => {
 				down_WallRef.current.style.display = "none";
 				up_WallRef.current.style.display = "none";
-			}, 1000);
+			}, 1300);
 		}
 	};
 
@@ -282,80 +301,154 @@ const YouTubeAudioPlayer = ({
 		}
 	};
 
+	const [inputProgressPercent, setInputProgressPercent] = useState(0);
+	// setInputProgressPercent((youtubePlayer.getCurrentTime() / maxSeekTime) * 100);
 
+	useEffect(() => {
+
+		console.log(maxSeekTime);
+		const intervalId = setInterval(() => {
+			if (youtubePlayer) setMaxSeetTime(youtubePlayer.getDuration());
+
+			if (youtubePlayer) {
+
+				inputSongTimerRef.current.value = youtubePlayer.getCurrentTime();
+				setSeekTime(youtubePlayer.getCurrentTime());
+				console.log(inputSongTimerRef.current.value);
+			}
+
+			setRenderComponent((prev) => !prev);  // Променя стойността на renderComponent на всеки интервал
+		}, 900);
+
+		return () => clearInterval(intervalId);  // Почистване на интервала при размонтиране
+	}, [youtubePlayer]);
+
+
+	// Изчисляване на процент от максималното време
+
+
+	const inputSongTimerRef = useRef(null);
 
 	return (
-		<article>
-			{/* Actual that is the Player: */}
+		<>
+			<span ref={under_black_shadow} className={style['under-black-shadow']}></span>
 
-			<div
-				className={style['player-ref-wrapper']}
-				ref={playerRefWrapper}
-			>
+
+			<article>
+				{/* Actual that is the Player: */}
+
+				<img className={style['gramophone-record-image']} src={gramophoneRecordImg} alt="gramophoneRecordImg" />
 
 				<div
-					style={{ position: "relative", left: "10em", zIndex: "20", borderRadius: "2em" }}
-					className='my-video-mf-player' ref={playerRef}
+					className={style['player-ref-wrapper']}
+					ref={playerRefWrapper}
 				>
-				</div>
 
-				<div ref={up_WallRef} className={style['up-wall']}></div>
-				<div ref={down_WallRef} className={style['down-wall']}></div>
-				<div className={style['right-wall']}>
-					{/* <img className={style['site-little-logo']} src={midalLogo} alt="midalLogo" /> */}
-				</div>
-				<div className={style['internal-sheel']}></div>
-			</div>
+					<div
+						style=
+						{{
+							position: "absolute", zIndex: "3",
+							width: "100%",
+							height: "100%",
+						}}
+						className='my-video-mf-player'
+						ref={playerRef}
+					>
+					</div>
 
 
-
-			<div className={style['player-container']}>
-
-				<div className={style['volume-slider']}>
-
-					<input
-						type="range"
-						id="volume"
-						name="volume"
-						min="0"
-						max="100"
-						value={volume}
-						onChange={handleVolumeChange}
-					/>
-				</div>
-				<div className={style['seek-container']}>
-					{/* {maxSeekTime > 0 && (
-						<h3
-							style={{ color: "green" }}>
-							{youtubePlayer ? `${Math.floor(youtubePlayer.getCurrentTime() / 60)}:${Math.floor(youtubePlayer.getCurrentTime() % 60).toString().padStart(2, '0')}` : '0:00'}
-						</h3>
-					)} */}
-
-					<input
-						className={style['song-time-control']}
-						type="range"
-						id="seekTime"
-						name="seekTime"
-						min="0"
-						max={maxSeekTime} // Задаване на максималната стойност
-						value={seekTime}
-						onChange={handleSeekChange}
-					/>
+					<div ref={up_WallRef} className={style['up-wall']}></div>
+					<div ref={down_WallRef} className={style['down-wall']}></div>
+					<div className={style['right-wall']}>
+						{/* <img className={style['site-little-logo']} src={midalLogo} alt="midalLogo" /> */}
+					</div>
+					<div className={style['internal-sheel']}></div>
 				</div>
 
 
-				<div className={style['arrows-container']}>
-					<img onClick={switchSong} className={style['onLeft']} src={onRight} alt="left" />
 
-					{songIsPlaying ?
-						<img onClick={switchSong} className={style['pause-video']} src={pauseVideo} alt="pause" />
-						:
-						<img onClick={switchSong} className={style['play-video']} src={playVideo} alt="play" />
-					}
-					<img onClick={switchSong} className={style['onRight']} src={onRight} alt="right" />
+				<div className={style['player-container']}>
+
+					<div className={style['volume-slider']}>
+
+						<input
+							type="range"
+							id="volume"
+							name="volume"
+							min="0"
+							max="100"
+							value={volume}
+							onChange={handleVolumeChange}
+							style={{
+								'--volume-level': volume // Текущото ниво на звука
+							}}
+						/>
+					</div>
+					<div className={style['seek-container']}>
+						{maxSeekTime > 0 && (
+							<section className={style['song-time-wrapper-container']}>
+								<h3
+									style={{ color: "green" }}>
+									{youtubePlayer && youtubePlayer.getCurrentTime ? `${Math.floor(youtubePlayer.getCurrentTime() / 60)}:${Math.floor(youtubePlayer.getCurrentTime() % 60).toString().padStart(2, '0')}` : '0:00'}
+								</h3>
+
+								<h3
+									style={{ color: "green" }}
+								>/{`${Math.floor(maxSeekTime / 60)}:${Math.floor(maxSeekTime % 60).toString().padStart(2, '0')}`}</h3>
+							</section>
+
+						)}
+
+						{/* <Slider
+							min={0}
+							max={maxSeekTime}
+							value={seekTime}
+							onChange={handleSeekChange}
+							trackStyle={{ backgroundColor: 'green', height: 5 }}
+							handleStyle={{
+								borderColor: 'green',
+								height: 15,
+								width: 15,
+								marginTop: -5,
+								backgroundColor: 'white',
+							}}
+							railStyle={{ backgroundColor: '#ccc', height: 5 }}
+						/> */}
+
+
+						<input
+							ref={inputSongTimerRef}
+							className={style['song-time-control']}
+							type="range"
+							id="seekTime"
+							name="seekTime"
+							min="0"
+							max={maxSeekTime} // Задаване на максималната стойност
+							value={seekTime}
+							onChange={handleSeekChange}
+							style={{
+								'--seek-time': seekTime, // Текущото време
+								'--max-seek-time': maxSeekTime // Максимално време
+							}}
+						/>
+
+
+
+					</div>
+
+					<div className={style['arrows-container']}>
+						<img onClick={switchSong} className={style['onLeft']} src={onRight} alt="left" />
+
+						{songIsPlaying ?
+							<img onClick={switchSong} className={style['pause-video']} src={pauseVideo} alt="pause" />
+							:
+							<img onClick={switchSong} className={style['play-video']} src={playVideo} alt="play" />
+						}
+						<img onClick={switchSong} className={style['onRight']} src={onRight} alt="right" />
+					</div>
 				</div>
-			</div>
-		</article>
+			</article>
+		</>
 	);
 };
 

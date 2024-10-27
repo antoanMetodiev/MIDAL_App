@@ -1,7 +1,7 @@
 
 .main-container {
     position: fixed;
-    z-index: 4;
+    z-index: 41;
     top: 5.7em;
     right: 0.8em;
     height: 30em;
@@ -111,7 +111,7 @@
     z-index: 11;
     bottom: 5em;
     right: 1em;
-    width: 2.5em;
+    width: 2.2em;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.95); /* Много силна черна сянка */
     border-radius: 0.8em;
     background-color: #fefefe8c;
