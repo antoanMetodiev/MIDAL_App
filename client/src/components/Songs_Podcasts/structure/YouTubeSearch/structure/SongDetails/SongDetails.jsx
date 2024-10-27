@@ -12,6 +12,7 @@ const SongDetails = ({
     playerRefWrapper,
     songsListRef,
     currentSongURL,
+    under_black_shadow,
 }) => {
     const [subtitles, setSubtitles] = useState('');
     let videoId = currentSongURL.current.split('v=')[1];
@@ -31,9 +32,10 @@ const SongDetails = ({
         //     youtubePlayer.setSize(620, 350);  // Промяна на размера на плеъра
         // }
         debugger;
+        under_black_shadow.current.style.display = "block";
         if (playerRefWrapper.current) {
             playerRefWrapper.current.style.opacity = "1";
-            playerRefWrapper.current.style.zIndex = "8";
+            playerRefWrapper.current.style.zIndex = "3 ";
         }
 
 
@@ -50,7 +52,7 @@ const SongDetails = ({
                 // Изпращаме заявка към API-то за текста на песента
                 getSubtitles(artist, title);
             } else {
-                setSubtitles("НЯМА НАЛИЧНИ СУБТИТРИ..");  // Ако не се намерят субтитри
+                setSubtitles("");  // Ако не се намерят субтитри
             }
         }
 
@@ -67,16 +69,21 @@ const SongDetails = ({
             if (data.lyrics) {
                 setSubtitles(data.lyrics);  // Задаваме текста на песента
             } else {
-                setSubtitles("НЯМА НАЛИЧНИ СУБТИТРИ..");  // Ако не се намерят субтитри
+                setSubtitles("");  // Ако не се намерят субтитри
             }
         } catch (error) {
             console.error("Error fetching lyrics:", error);
-            setSubtitles("ГРЕШКА ПРИ ВЗИМАНЕТО НА СУБТИТРИ..");
+            setSubtitles("");
         }
     }
 
 
     function backToSongsListHandler() {
+        under_black_shadow.current.style.display = "none";
+        if (playerRefWrapper.current) {
+            playerRefWrapper.current.style.opacity = "0";
+            playerRefWrapper.current.style.zIndex = "0 ";
+        }
         songsListRef.current.style.flexWrap = "wrap";
         document.body.style.overflow = 'auto';
         youtubePlayer.setSize(0, 0);
