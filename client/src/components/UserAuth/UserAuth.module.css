@@ -1,1 +1,92 @@
 
+
+
+.register-login-container {
+    background-color: #fff;
+    width: 46em;
+    height: 28em;
+    position: fixed;
+    z-index: 8;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: space-between;
+    border-radius: 2em;
+    padding-inline: 1em;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Черна сянка */
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.5); /* Бяла сянка */
+}
+
+.moving-image {
+    border-top-right-radius: 2em;
+    border-bottom-right-radius: 2em;
+    position: absolute;
+    z-index: 8;
+    width: 26em;
+    height: 100%;
+    object-fit: cover;
+    left: 50%;
+    transition: left 0.5s ease-in-out; /* Времетраене и вид на анимацията */
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.5); /* Бяла сянка */
+}
+
+
+.sign-in-your-profileH3 {
+    position: absolute;
+    top: 50%;
+    left: 75%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    color: #fefefedb;
+    background-color: #000000;
+    padding: 0.5em 0.43em;
+    border-radius: 1em;
+    font-weight: 400;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 1.05em;
+    transition: left 0.5s ease-in-out; /* Времетраене и вид на анимацията */
+}
+
+.sign-in-your-profileH3:hover {
+    cursor: pointer;
+}
+
+.register-login-back {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    border-radius: 2em;
+}
+
+.black-shadow {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    z-index: 2;
+    left: 0;
+    border-radius: 2em;
+    background-color: #00000082;
+}
+
+.close-sign-form {
+    position: absolute;
+    z-index: 14;
+    right: 1em;
+    top: 0.5em;
+    /* color: #fff; */
+    color: #fff;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease; /* Плавен преход за zoom ефекта */
+}
+
+.close-sign-form:hover {
+    cursor: pointer;
+    /* color: silver; */
+    transform: scale(1.1); /* Уголемяване на елемента при hover */
+}
