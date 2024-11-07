@@ -13,6 +13,7 @@ const SongDetails = ({
     songsListRef,
     currentSongURL,
     under_black_shadow,
+    searchEngine_optionsContainerWrapperRef,
 }) => {
     const [subtitles, setSubtitles] = useState('');
     let videoId = currentSongURL.current.split('v=')[1];
@@ -33,6 +34,7 @@ const SongDetails = ({
         // }
         debugger;
         under_black_shadow.current.style.display = "block";
+        searchEngine_optionsContainerWrapperRef.current.style.display = "none";
         if (playerRefWrapper.current) {
             playerRefWrapper.current.style.opacity = "1";
             playerRefWrapper.current.style.zIndex = "3 ";
@@ -80,6 +82,7 @@ const SongDetails = ({
 
     function backToSongsListHandler() {
         under_black_shadow.current.style.display = "none";
+        searchEngine_optionsContainerWrapperRef.current.style.display = "block";
         if (playerRefWrapper.current) {
             playerRefWrapper.current.style.opacity = "0";
             playerRefWrapper.current.style.zIndex = "0 ";
@@ -95,19 +98,6 @@ const SongDetails = ({
 
     return (
         <article className={style['song-details-container']}>
-
-            {/* <iframe
-                className={style['background-video']}
-                src={random}
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                width="100%"
-                height="100%"
-                title="YouTube Video Player"
-            ></iframe> */}
-
-
             <img onClick={backToSongsListHandler} className={style['back-to-songList']} src={backToSongsList} alt="backToSongsList" />
             <h2 className={style['video-title']}>{currentListeningSong.snippet.title}</h2>
             <h4 className={style['subtitles-text']}>{subtitles}</h4>
