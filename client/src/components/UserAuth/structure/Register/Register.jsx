@@ -25,9 +25,10 @@ const Register = ({
 
         // Поставям imageURL и тайна дума (само ако user-a си ги е въвел - те не са задължителни..)
         if (imageUrl.length > 0) userData.imageURL = imageUrl;
-        if (event.target.secret_world.value.length > 0) {
-            userData.secret_world = event.target.secret_world.value;
-        }
+        
+        // if (event.target.secret_world.value.length > 0) {
+        //     userData.secret_world = event.target.secret_world.value;
+        // }
 
         event.target.reset();
 
@@ -53,22 +54,22 @@ const Register = ({
     };
 
     return (
-        <article className={style['register-wrapper']}>
+        <article  className={style['register-wrapper']}>
 
-            <img
+            {/* <img
                 className={style['back-image']}
                 src={backImage}
                 alt="backImage"
-            />
+            /> */}
 
-            <h4 className={style['hide-register']} onClick={activateSetHideBothHandler}>Hide..</h4>
+            {/* <h4 className={style['hide-register']} onClick={activateSetHideBothHandler}>Hide..</h4> */}
 
             <form
                 onSubmit={registerUser}
                 className={style['register-form']}
             >
                 <div className={style['username-wrapper']}>
-                    <label htmlFor="username">Пълно Име</label>
+                    <label htmlFor="username">Първо и фамилно име</label>
                     <input type="text" name="username" id="username" />
                 </div>
 
@@ -87,10 +88,10 @@ const Register = ({
                     <ImageUpload imageUrl={imageUrl} setImageUrl={setImageUrl} />
                 </div>
 
-                <div className={style['password-wrapper']}>
+                {/* <div className={style['password-wrapper']}>
                     <label htmlFor="secret-world">Тайна Дума</label>
                     <input type="text" name="secret_world" id="secret-world" />
-                </div>
+                </div> */}
 
                 <button>Регистрация</button>
             </form>
