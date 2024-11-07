@@ -106,7 +106,7 @@ const YouTubeAudioPlayer = ({
 						}, 5500);
 
 						setMaxSeetTime(event.target.getDuration());
-						setSongIsPlaying(true);
+						setSongIsPlayingHandler(true);
 						setIListenThisSongHandler(videoData);
 					},
 					onStateChange: (event) => {
@@ -337,7 +337,7 @@ const YouTubeAudioPlayer = ({
 			<article>
 				{/* Actual that is the Player: */}
 
-				<img className={style['gramophone-record-image']} src={gramophoneRecordImg} alt="gramophoneRecordImg" />
+				{/* <img className={style['gramophone-record-image']} src={gramophoneRecordImg} alt="gramophoneRecordImg" /> */}
 
 				<div
 					className={style['player-ref-wrapper']}
