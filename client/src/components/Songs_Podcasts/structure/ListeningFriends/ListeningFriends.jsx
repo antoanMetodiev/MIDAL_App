@@ -8,6 +8,8 @@ const ListeningFriends = ({
 }) => {
     const [showFriendContainer, setShowFriendContainer] = useState(false);
 
+    console.log(myFriendsListens);
+
 
     function hideOrShowFriendListHandler(event) {
         if (event.target.alt === 'openFriendList') {
@@ -26,34 +28,181 @@ const ListeningFriends = ({
     };
 
     return (
-        <div className={style['main-container-wrapper']}>
+        <div className={style['listening-friends-wrapper']}>
+
+
             {showFriendContainer && (
                 <article className={style['main-container']}>
+
+                    {/* <div className={style['background']}>
+
+                    </div> */}
 
                     {myFriendsListens && (
                         myFriendsListens.map(user => {
                             return (
-                                <div className={style['friend-container']}>
+                                <>
+                                    <div className={style['friend-container']}>
 
-                                    <p className={style['song-title']}>
-                                        <h6>Слуша..</h6>
-                                        {user.message}
-                                    </p>
-                                    <span className={style['connection-span']}></span>
-                                    <img className={style['friend-img']} src={user.imgURL} alt="friend-img" />
-                                    {/* <h4>{user.myName}</h4> */}
+                                        <p className={style['song-title']}>
+                                            <h6>Слуша..</h6>
+                                            {user.message}
+                                        </p>
+                                        <span className={style['connection-span']}></span>
+                                        <img className={style['friend-img']} src={user.imgURL} alt="friend-img" />
+                                        {/* <h4>{user.myName}</h4> */}
 
-                                    <img className={style['online-image']} src={onlineImg} alt="online-image" />
-                                    <h5 className={style['online-text']}>онлайн..</h5>
-                                </div>
+                                        <img className={style['online-image']} src={onlineImg} alt="online-image" />
+                                        <h5 className={style['online-text']}>онлайн..</h5>
+                                    </div>
+                                    <div className={style['friend-container']}>
+
+                                        <p className={style['song-title']}>
+                                            <h6>Слуша..</h6>
+                                            {user.message}
+                                        </p>
+                                        <span className={style['connection-span']}></span>
+                                        <img className={style['friend-img']} src={user.imgURL} alt="friend-img" />
+                                        {/* <h4>{user.myName}</h4> */}
+
+                                        <img className={style['online-image']} src={onlineImg} alt="online-image" />
+                                        <h5 className={style['online-text']}>онлайн..</h5>
+                                    </div>
+                                    <div className={style['friend-container']}>
+
+                                        <p className={style['song-title']}>
+                                            <h6>Слуша..</h6>
+                                            {user.message}
+                                        </p>
+                                        <span className={style['connection-span']}></span>
+                                        <img className={style['friend-img']} src={user.imgURL} alt="friend-img" />
+                                        {/* <h4>{user.myName}</h4> */}
+
+                                        <img className={style['online-image']} src={onlineImg} alt="online-image" />
+                                        <h5 className={style['online-text']}>онлайн..</h5>
+                                    </div>
+                                    <div className={style['friend-container']}>
+
+                                        <p className={style['song-title']}>
+                                            <h6>Слуша..</h6>
+                                            {user.message}
+                                        </p>
+                                        <span className={style['connection-span']}></span>
+                                        <img className={style['friend-img']} src={user.imgURL} alt="friend-img" />
+                                        {/* <h4>{user.myName}</h4> */}
+
+                                        <img className={style['online-image']} src={onlineImg} alt="online-image" />
+                                        <h5 className={style['online-text']}>онлайн..</h5>
+                                    </div>
+                                    <div className={style['friend-container']}>
+
+                                        <p className={style['song-title']}>
+                                            <h6>Слуша..</h6>
+                                            {user.message}
+                                        </p>
+                                        <span className={style['connection-span']}></span>
+                                        <img className={style['friend-img']} src={user.imgURL} alt="friend-img" />
+                                        {/* <h4>{user.myName}</h4> */}
+
+                                        <img className={style['online-image']} src={onlineImg} alt="online-image" />
+                                        <h5 className={style['online-text']}>онлайн..</h5>
+                                    </div>
+                                    <div className={style['friend-container']}>
+
+                                        <p className={style['song-title']}>
+                                            <h6>Слуша..</h6>
+                                            {user.message}
+                                        </p>
+                                        <span className={style['connection-span']}></span>
+                                        <img className={style['friend-img']} src={user.imgURL} alt="friend-img" />
+                                        {/* <h4>{user.myName}</h4> */}
+
+                                        <img className={style['online-image']} src={onlineImg} alt="online-image" />
+                                        <h5 className={style['online-text']}>онлайн..</h5>
+                                    </div>
+                                    <div className={style['friend-container']}>
+
+                                        <p className={style['song-title']}>
+                                            <h6>Слуша..</h6>
+                                            {user.message}
+                                        </p>
+                                        <span className={style['connection-span']}></span>
+                                        <img className={style['friend-img']} src={user.imgURL} alt="friend-img" />
+                                        {/* <h4>{user.myName}</h4> */}
+
+                                        <img className={style['online-image']} src={onlineImg} alt="online-image" />
+                                        <h5 className={style['online-text']}>онлайн..</h5>
+                                    </div>
+                                    <div className={style['friend-container']}>
+
+                                        <p className={style['song-title']}>
+                                            <h6>Слуша..</h6>
+                                            {user.message}
+                                        </p>
+                                        <span className={style['connection-span']}></span>
+                                        <img className={style['friend-img']} src={user.imgURL} alt="friend-img" />
+                                        {/* <h4>{user.myName}</h4> */}
+
+                                        <img className={style['online-image']} src={onlineImg} alt="online-image" />
+                                        <h5 className={style['online-text']}>онлайн..</h5>
+                                    </div>
+                                    <div className={style['friend-container']}>
+
+                                        <p className={style['song-title']}>
+                                            <h6>Слуша..</h6>
+                                            {user.message}
+                                        </p>
+                                        <span className={style['connection-span']}></span>
+                                        <img className={style['friend-img']} src={user.imgURL} alt="friend-img" />
+                                        {/* <h4>{user.myName}</h4> */}
+
+                                        <img className={style['online-image']} src={onlineImg} alt="online-image" />
+                                        <h5 className={style['online-text']}>онлайн..</h5>
+                                    </div>
+                                    <div className={style['friend-container']}>
+
+                                        <p className={style['song-title']}>
+                                            <h6>Слуша..</h6>
+                                            {user.message}
+                                        </p>
+                                        <span className={style['connection-span']}></span>
+                                        <img className={style['friend-img']} src={user.imgURL} alt="friend-img" />
+                                        {/* <h4>{user.myName}</h4> */}
+
+                                        <img className={style['online-image']} src={onlineImg} alt="online-image" />
+                                        <h5 className={style['online-text']}>онлайн..</h5>
+                                    </div>
+                                    <div className={style['friend-container']}>
+
+                                        <p className={style['song-title']}>
+                                            <h6>Слуша..</h6>
+                                            {user.message}
+                                        </p>
+                                        <span className={style['connection-span']}></span>
+                                        <img className={style['friend-img']} src={user.imgURL} alt="friend-img" />
+                                        {/* <h4>{user.myName}</h4> */}
+
+                                        <img className={style['online-image']} src={onlineImg} alt="online-image" />
+                                        <h5 className={style['online-text']}>онлайн..</h5>
+                                    </div>
+                                    <div className={style['friend-container']}>
+
+                                        <p className={style['song-title']}>
+                                            <h6>Слуша..</h6>
+                                            {user.message}
+                                        </p>
+                                        <span className={style['connection-span']}></span>
+                                        <img className={style['friend-img']} src={user.imgURL} alt="friend-img" />
+                                        {/* <h4>{user.myName}</h4> */}
+
+                                        <img className={style['online-image']} src={onlineImg} alt="online-image" />
+                                        <h5 className={style['online-text']}>онлайн..</h5>
+                                    </div>
+
+                                </>
                             )
                         })
                     )}
-
-                    {/* FROM HERE: */}
-
-                    
-                        
                 </article>
             )}
 
