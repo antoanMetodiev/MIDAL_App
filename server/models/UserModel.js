@@ -17,9 +17,9 @@ const UserSchema = new mongoose.Schema({
     imageURL: {
         type: String,
     },
-    secret_world: {
-        type: String,
-    },
+    // secret_world: {
+    //     type: String,
+    // },
 
     
     friendsList: [{
@@ -28,6 +28,9 @@ const UserSchema = new mongoose.Schema({
     friendsRequests: [{
         type: Object,
     }],
+    invitedFriends : [{
+        type: Object,
+    }], 
     blockedUsers: [{
         type: Object,
     }],
@@ -38,7 +41,7 @@ const UserSchema = new mongoose.Schema({
         type: Object,
         default: {
             Харесани: {
-                imgURL: "https://res.cloudinary.com/dxkloyfs1/image/upload/v1728853213/rusx9nxj3vuzb9yy5gt2.png",
+                imgURL: "likedSongsPlaylistImage",
                 songs: [],
             },  // Дефолтна стойност за myPlaylists с ключ "Харесани" и празен масив
         },
