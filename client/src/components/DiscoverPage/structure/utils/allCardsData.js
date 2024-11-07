@@ -10,18 +10,18 @@ import image7 from "../../resources/images/7.jpg";
 const allCardsData = [
     {
         image: image1,
-        title: "Hear more of your music.",
-        text: "Enjoy your music like never before on MIDAL. Get the best-in-class lossless audio formats, HiRes FLAC, and Dolby Atmos.",
+        title: "V:RGO",
+        text: "Виктор Йорданов /Вирго/ е роден през 1998 година в град Бургас. Занимава се с усилено с рап още преди да завърши. До момента има много песни ,най-изестните от които – ,,Трап лапе” ,,Хаста маняна” ,,Ай тихо”..",
     },
     {
         image: image2,
-        title: "Over 110 million songs and counting.",
-        text: "Discover your next favorite artist or song in our ad-free music library of over 110 million tracks.",
+        title: "Fyre",
+        text: `Fyre е добре известен български изпълнител и модел за подражание сред младите. Създател на "team 02" и на много силно въздействаща българска музика, като.. "Всекиму Своето", "Здрав. Як. Силен. Стабилен", "Сълзи От Врагове" и много други.. `,
     },
     {
         image: image5,
-        title: "Curated playlists.",
-        text: "We stay ahead of the next and best in culture. Listen to original playlists from our team or stream guest playlists from your favorite artists.",
+        title: "Дарина Йотова",
+        text: `Дарина Николаева Йотова, по-известна като Дара (DARA) е българска певица. Добива популярност септември 2015 г. с участието си в телевизионното състезание „X Factor“. Освен музикален изпълнител - Дара е част от журито на "Гласът на България". Изпълнител на песни като.. "Заминавам", "Няма да ми липсваш", "Богиня" и много други..`,
     },
     {
         image: image7,
