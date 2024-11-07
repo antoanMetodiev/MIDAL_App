@@ -51,17 +51,27 @@ const UserSearch = ({
         const myData = JSON.parse(localStorage.getItem('MIDAL_USER'));
 
         debugger;
-        const message = await axios.post('http://localhost:8080/add-friend', { id: id, name: name, imgURL: imgURL, myData: myData });
+        try {
+            const message = await axios.post('http://localhost:8080/add-friend', {
+                id: id, name: name, imgURL: imgURL, myData: myData
+            });
 
-        // Добавяне и в localceStorage за да не налага да рефрешвам:
-        const newFriend = { id: id, name: name, imgURL: imgURL };
-        myData.friendsList.push(newFriend);
-        localStorage.setItem('MIDAL_USER', JSON.stringify(myData));
 
-        const newObject = myFriendsList.slice();
-        newObject.push(newFriend);
-        setMyFriendsList(newObject);
-        console.log(newObject);
+
+            if (message.data.text === "Поканата е изпратена!") {
+                // Добавяне и в localceStorage за да не се налага да рефрешвам:
+                const newFriend = { id: id, name: name, imgURL: imgURL };
+                myData.friendsList.push(newFriend);
+                localStorage.setItem('MIDAL_USER', JSON.stringify(myData));
+
+                const newObject = myFriendsList.slice();
+                newObject.push(newFriend);
+                setMyFriendsList(newObject);
+                console.log(newObject);
+            }
+        } catch (error) {
+            console.log(error);
+        }
     };
 
 
