@@ -9,17 +9,17 @@ import UserDetails from "./structure/UserDetails/UserDetails";
 import ListeningFriends from "./structure/ListeningFriends/ListeningFriends";
 import FavouritePlaylists from "./structure/FavouritePlaylists/FavouritePlaylists";
 import SongDetails from "./structure/YouTubeSearch/structure/SongDetails/SongDetails";
+import FriendsRequests from "./structure/FriendsRequests/FriendsRequests";
 
-import backImage from "./resources/images/monkey.png";
+import backImage from "./resources/images/monkey.jpg";
 import siteLogo from "./resources/images/midal-logo.jpg";
-import likedSongsImage from "./resources/images/monkey.png";
 import searchButton from "../Songs_Podcasts/resources/images/search-button.png";
 import planetImg from "./resources/images/planet.png";
 
 import updateAccessToken from "../GoogleAuth/utils/updateAccessToken";
 import cookies from "js-cookie";
 import axios from "axios";
-import { json, useLocation } from "react-router-dom";
+import { json, useLocation, useNavigate } from "react-router-dom";
 
 
 import io from 'socket.io-client';
@@ -127,7 +127,6 @@ const Songs_Podcasts = () => {
 
     useEffect(() => {
         // Слушане за съобщения от сървъра
-
         const myId = JSON.parse(localStorage.getItem('MIDAL_USER'))._id;
 
         socket.on(`songUpdate-${myId}`, (data) => {
@@ -177,6 +176,7 @@ const Songs_Podcasts = () => {
         let videoDataOriginal = receivedSong;
 
         async function publishSongOperation() {
+            debugger;
             const lastListenedSongForMe = JSON.parse(localStorage.getItem('LAST_LISTENED_SONG'));
             const myId = myUserData._id ? myUserData._id : lastListenedSongForMe.myId;
             const img = JSON.parse(localStorage.getItem('MIDAL_USER')).imageURL;
@@ -277,6 +277,8 @@ const Songs_Podcasts = () => {
     }, []);
 
     useEffect(() => {
+
+
         if (location.pathname == '/songs-podcasts') {
             const data = JSON.parse(localStorage.getItem('MIDAL_USER'));
 
@@ -413,9 +415,10 @@ const Songs_Podcasts = () => {
         };
     };
 
+    const searchEngine_optionsContainerWrapperRef = useRef(null);
+
     return (
         <article className={style['songs-podcasts-container']}>
-
             <span className={style['black-shadow']}></span>
             <img
                 className={style['back-image']}
@@ -425,46 +428,71 @@ const Songs_Podcasts = () => {
 
             <article className={style['content-and-searchEngine-container']}>
 
-                <section className={style['options-container']}>
-                    <h3 ref={songsAndPodcastsH3} onClick={changeSearch}>Музика & Подкасти</h3>
-                    <h3 ref={userProfilesH3} onClick={changeSearch}>Профили</h3>
-                    <h3 ref={userDetailsH3} onClick={changeSearch}>Акаунт</h3>
-                    <h3 ref={requestNewSongH3} onClick={changeSearch}>Заяви Песен/Подкаст</h3>
-                    <img onClick={showMoreOptionsHandler} className={style['more-options-img']} src={planetImg} alt="show" />
-                </section>
+
+                <div ref={searchEngine_optionsContainerWrapperRef}>
+                    <section className={style['options-container']}>
+                        <h3 ref={songsAndPodcastsH3} onClick={changeSearch}>Музика & Подкасти</h3>
+                        <h3 ref={userProfilesH3} onClick={changeSearch}>Профили</h3>
+                        <h3 ref={userDetailsH3} onClick={changeSearch}>Акаунт</h3>
+                        <h3 ref={requestNewSongH3} onClick={changeSearch}>Заяви Песен/Подкаст</h3>
+                        <img onClick={showMoreOptionsHandler} className={style['more-options-img']} src={planetImg} alt="show" />
+                    </section>
+
+                    <span className={style['white-border-radius-wrapper-container']}></span>
+                    <form
+                        className={style['search-form']}
+                        onSubmit={handleSearch}
+                    >
+                        <input
+                            ref={searchEngineRef}
+                            className={style['search-engine']}
+                            type="text"
+                            placeholder="Слушай.."
+                            name="search_engine"
+                        />
+
+                        <img
+                            className={style['search-button']}
+                            src={searchButton}
+                            onClick={() => {
+                                handleSearch();
+                            }}
+                            alt="searchButton"
+                        />
+                    </form>
+                </div>
 
 
                 {showMoreOptions && (
-                    <section className={style['more-options-container']}>
-                        <h4>Покани за приятелство</h4>
-                        <h4>Блокирани потребители</h4>
-                    </section>
+                    <>
+                        <div>
+                            mao
+                        </div>
+
+                        <section
+                            onClick={(event) => {
+                                debugger;
+                                if (event.target.textContent === "Покани за приятелство") {
+
+                                    const friendsRequestsEl = event.currentTarget.nextElementSibling;
+                                    friendsRequestsEl.style.display = "flex";
+
+                                } else if (event.target.textContent === "Блокирани потребители") {
+                                    console.log(event.currentTarget.previousElementSibling.textContent);
+                                }
+                            }}
+                            className={style['more-options-container']}
+                        >
+                            <h4>Покани за приятелство</h4>
+                            <h4>Блокирани потребители</h4>
+                        </section>
+
+                        <FriendsRequests myUserData={myUserData} />
+                    </>
                 )}
 
 
                 <ListeningFriends myFriendsListens={myFriendsListens} />
-
-                <form
-                    className={style['search-form']}
-                    onSubmit={handleSearch}
-                >
-                    <input
-                        ref={searchEngineRef}
-                        className={style['search-engine']}
-                        type="text"
-                        placeholder="Слушай.."
-                        name="search_engine"
-                    />
-
-                    <img
-                        className={style['search-button']}
-                        src={searchButton}
-                        onClick={() => {
-                            handleSearch();
-                        }}
-                        alt="searchButton"
-                    />
-                </form>
 
 
 
@@ -506,6 +534,7 @@ const Songs_Podcasts = () => {
                         songsListRef={songsListRef}
                         currentSongURL={currentSongURL}
                         under_black_shadow={under_black_shadow}
+                        searchEngine_optionsContainerWrapperRef={searchEngine_optionsContainerWrapperRef}
                     />
                 )}
 
