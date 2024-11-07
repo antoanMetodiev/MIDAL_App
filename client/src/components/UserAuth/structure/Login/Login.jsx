@@ -36,26 +36,25 @@ const Login = ({
     };
 
     return (
-        <article className={style['login-wrapper']}>
+        <article  className={style['login-wrapper']}>
 
-            <h4 onClick={activateSetHideBothHandler}>Hide..</h4>
-
+            {/* <h4 onClick={activateSetHideBothHandler}>Hide..</h4> */}
 
             <form
                 onSubmit={loginUser}
                 className={style['login-form']}
             >
                 <div className={style['username-wrapper']}>
-                    <label htmlFor="username">Username</label>
+                    <label htmlFor="username">Потребителско име</label>
                     <input type="text" name="username" id="username" />
                 </div>
 
                 <div className={style['password-wrapper']}>
-                    <label htmlFor="password">Password</label>
+                    <label htmlFor="password">Парола</label>
                     <input type="password" name="password" id="password" />
                 </div>
 
-                <button>Login</button>
+                <button>Влизане</button>
             </form>
         </article>
     );
