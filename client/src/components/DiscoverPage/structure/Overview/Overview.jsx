@@ -5,10 +5,9 @@ import Header from "./structure/Header/Header";
 import Body from "./structure/Body/Body";
 
 const Overview = ({
-    setShowRegisterHandler,
-    setShowLoginHandler,
     isRegistered,
-    setIsRegisteredHandler
+    setIsRegisteredHandler,
+    setShowSignFormHandler,
 }) => {
 
 
@@ -24,14 +23,13 @@ const Overview = ({
             />
 
             {/* Here starting the structure: */}
-            <Header 
+            <Header
+                setShowSignFormHandler={setShowSignFormHandler}
                 isRegistered={isRegistered}
                 setIsRegisteredHandler={setIsRegisteredHandler}
-                setShowRegisterHandler={setShowRegisterHandler} 
-                setShowLoginHandler={setShowLoginHandler} />
+            />
+            
             <Body />
-
-
         </div>
     );
 }
