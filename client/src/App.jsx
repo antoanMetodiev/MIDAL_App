@@ -1,5 +1,5 @@
 import './App.css';
-import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import cookies from "js-cookie";
 import axios from "axios";
@@ -8,11 +8,11 @@ import DiscoverPage from './components/DiscoverPage/DiscoverPage';
 import GoogleHandler from './components/GoogleAuth/GoogleHandler';
 import Songs_Podcasts from './components/Songs_Podcasts/Songs_Podcasts';
 import UserAuth from './components/UserAuth/UserAuth';
-import PocketBaseLogin from './components/PocketBase/PocketBaseLogin';
+
 
 function App() {
-	const [showLogin, setShowLogin] = useState(false);
-	const [showRegister, setShowRegister] = useState(false);
+	const navigate = useNavigate();
+	const [showSignForm, setShowSignForm] = useState(false);
 	const [userData, setUserData] = useState({});
 	const [isRegistered, setIsRegistered] = useState(false);
 
@@ -34,6 +34,8 @@ function App() {
 				} catch (error) {
 					console.log(error);
 				};
+			} else {
+				navigate("/");
 			}
 		};
 
@@ -42,13 +44,9 @@ function App() {
 	}, []);
 
 
-
-	const setShowLoginHandler = (value) => {
-		setShowLogin(value);
-	};
-
-	const setShowRegisterHandler = (value) => {
-		setShowRegister(value);
+	// Functions:
+	const setShowSignFormHandler = (value) => {
+		setShowSignForm(value);
 	};
 
 	const setUserDataHandler = (value) => {
@@ -63,22 +61,19 @@ function App() {
 
 	return (
 		<>
-			{/* <PocketBaseLogin /> */}
-
 			<UserAuth
 				setUserDataHandler={setUserDataHandler}
-				showRegister={showRegister}
-				showLogin={showLogin}
-				setShowLoginHandler={setShowLoginHandler}
-				setShowRegisterHandler={setShowRegisterHandler}
+				showSignForm={showSignForm}
+				setShowSignFormHandler={setShowSignFormHandler}
 			/>
 
 			<Routes>
-				<Route path="/" element={<DiscoverPage
-					isRegistered={isRegistered}
-					setIsRegisteredHandler={setIsRegisteredHandler}
-					setShowRegisterHandler={setShowRegisterHandler}
-					setShowLoginHandler={setShowLoginHandler} />}
+				<Route path="/" element={
+					<DiscoverPage
+						isRegistered={isRegistered}
+						setIsRegisteredHandler={setIsRegisteredHandler}
+						setShowSignFormHandler={setShowSignFormHandler}
+					/>}
 				/>
 				<Route path="/songs-and-podcasts" element={<GoogleHandler />} />
 				<Route path="/songs-podcasts" element={<Songs_Podcasts />} />
