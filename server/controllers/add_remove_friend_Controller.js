@@ -55,7 +55,6 @@ app.post('/add-friend', async (req, res) => {
 
 app.post('/accept-friend-request', async (req, res) => {
     const { personData, myUserData } = req.body;
-
     console.log(personData);
     console.log(myUserData);
 
