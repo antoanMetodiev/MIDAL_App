@@ -8,10 +8,9 @@ import { CLIENT_ID, REDIRECT_URI, SCOPE } from "../../../../../GoogleAuth/spotif
 import cookies from "js-cookie";
 
 const Header = ({
-    setShowRegisterHandler,
-    setShowLoginHandler,
     isRegistered,
     setIsRegisteredHandler,
+    setShowSignFormHandler
 }) => {
     const navigate = useNavigate();
 
@@ -23,12 +22,11 @@ const Header = ({
     };
 
     function showRegisterOrLoginForm(event) {
-        if (event.target.textContent == 'Sing In') {
-            setShowLoginHandler(true);
-            setShowRegisterHandler(false);
+        debugger;
+        if (event.target.textContent == 'Влизане/Регистрация') {
+            setShowSignFormHandler(true);
         } else {
-            setShowRegisterHandler(true);
-            setShowLoginHandler(false);
+            setShowSignFormHandler(false);
         };
     };
 
@@ -53,23 +51,24 @@ const Header = ({
             <nav className={style['overview-navigation']}>
                 <ul>
 
-                    <li
-                        className={style['songs-podcasts-li-item']}
-                        onClick={loginWithGoogle}
-                    >Songs & Podcasts</li>
-                    <li>For The Creator</li>
-
+                    {isRegistered && (
+                        <li
+                            className={style['songs-podcasts-li-item']}
+                            onClick={loginWithGoogle}
+                        >
+                            Музика и Подкасти
+                        </li>
+                    )}
 
                     {!isRegistered ? (
                         <>
-                            <li onClick={showRegisterOrLoginForm}>Sing In</li>
-                            <li onClick={showRegisterOrLoginForm}>Sing Up</li>
+                            <li onClick={showRegisterOrLoginForm}>Влизане/Регистрация</li>
                         </>
                     ) : (
-                        <li onClick={logOut}>Log Out</li>
+                        <li onClick={logOut}>Излизане</li>
                     )}
 
-
+                    <li>За Създателя</li>
                 </ul>
             </nav>
 

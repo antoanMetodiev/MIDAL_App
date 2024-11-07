@@ -6,10 +6,11 @@ const Body = () => {
     return (
         <article className={style['wrapper']}>
 
+
             <aside className={style['aside-content-container']}>
-                <h2>Find Yourself. Listen Deep. Feel Alive</h2>
-                <p>Listen to your favorite songs and podcasts with best-in-class sound.</p>
-                <button>Try it for free.</button>
+                <h3 className={style['h3-motivation']}>Слушай любимата си музика и подкасти напълно <span className={style['without-advertisements']}>БЕЗ РЕКЛАМИ</span>.</h3>
+                <p>Следи в <span className={style['without-advertisements']}>РЕАЛНО ВРЕМЕ</span> какво слушат приятелите ти и се присъедини към тях с най-добрия звук!</p>
+                <button>Опитай безплатно.</button>
             </aside>
 
             <div className={style['image-container']}>

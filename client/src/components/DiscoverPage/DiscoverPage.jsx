@@ -1,12 +1,10 @@
 import Overview from "./structure/Overview/Overview";
 import CarouselPlaylist from "./structure/CarouselPlaylist/CarouselPlaylist";
 import SoundsInfo from "./structure/SoundsInfo/SoundsInfo";
-import PaymentPlans from "./structure/PaymentPlans/PaymentPlans";
 
 const DiscoverPage = ({
-    setShowRegisterHandler,
-    setShowLoginHandler,
     isRegistered,
+    setShowSignFormHandler,
     setIsRegisteredHandler,
 }) => {
 
@@ -14,14 +12,12 @@ const DiscoverPage = ({
     return (
         <article>
             <Overview 
+                setShowSignFormHandler={setShowSignFormHandler}
                 isRegistered={isRegistered}
                 setIsRegisteredHandler={setIsRegisteredHandler}
-                setShowRegisterHandler={setShowRegisterHandler} 
-                setShowLoginHandler={setShowLoginHandler} 
             />
             <CarouselPlaylist />
             <SoundsInfo />
-            <PaymentPlans />
         </article>
     );
 };
