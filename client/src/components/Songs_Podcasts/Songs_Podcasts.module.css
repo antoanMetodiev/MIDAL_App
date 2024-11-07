@@ -9,14 +9,25 @@
     height: 100vh;
 }
 
+
+.white-border-radius-wrapper-container {
+    position: fixed;
+    z-index: 4;
+    width: 100%;
+    height: 4.8em;
+    background-color: #121212;
+    /* box-shadow: 0px 3px 8px rgba(255, 255, 255, 0.3);  */
+}
+
 .search-form {
     position: relative;
-    z-index: 2;
+    z-index: 5;
 }
 
 .search-engine {
     margin-bottom: 3em;
-    position: relative;
+    position: fixed;
+    z-index: 4;
     top: 3.3em;
     left: 33em;
     transform: translate(-60%, -50%);
@@ -31,9 +42,9 @@
 }
 
 .search-button {
-    position: absolute;
+    position: fixed;
     top: 1.93em;
-    left: 35.6em;    
+    left: 35.6em;
     width: 1.72em;
     height: 1.72em;
 }
@@ -70,16 +81,16 @@ span.black-shadow {
     /* Височина 100% от височината на екрана */
     z-index: -1;
     /* Поставя изображението зад другото съдържание */
-    opacity: 0.82;
+    opacity: 0.87;
 }
 
 .options-container {
-    position: absolute;
-    z-index: 3;
+    position: fixed;
+    z-index: 5;
     top: 1.8em;
     left: 41em;
     display: flex;
-    width: 48em;
+    width: 50em;
     gap: 1.8em;
     color: #fefefec0;
     align-items: center;
@@ -131,8 +142,8 @@ span.black-shadow {
 }
 
 .more-options-container {
-    position: absolute;
-    z-index: 2;
+    position: fixed;
+    z-index: 10;
     top: 5em;
     right: 9em;
     background-color: black;
@@ -143,7 +154,7 @@ span.black-shadow {
     padding: 2px 4px;
 }
 
-.more-options-container > h4:hover {
+.more-options-container>h4:hover {
     background-color: gray;
     cursor: default;
 }
@@ -153,7 +164,7 @@ span.black-shadow {
 .songs-list {
     position: absolute;
     z-index: 3;
-    top: 6em;
+    top: 6.2em;
     left: 14em;
     width: 84%;
     margin: 1em auto 0em auto;
@@ -201,7 +212,7 @@ span.black-shadow {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     color: #fff;
     font-family: 'Arial', sans-serif;
-    animation: glow 1s ease-in-out infinite;
+    animation: glow 0.4s ease-in-out infinite;
     position: relative;
 }
 
@@ -223,13 +234,15 @@ span.black-shadow {
     width: 110%;
     height: 110%;
     /* background: rgba(255, 255, 255, 0.15); */
+    /* background: rgba(255, 255, 255, 0.185); */
     background: rgba(255, 255, 255, 0.185);
-    /* transform: rotate(3deg); */
+    /* transform: rotate(20deg); */
     pointer-events: none;
     transition: opacity 0.5s ease;
     opacity: 0;
     border-radius: 3em;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* лек черен сенчест ефект */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    /* лек черен сенчест ефект */
 }
 
 .song-container:hover::before {
@@ -242,7 +255,7 @@ span.black-shadow {
     font-size: 1.1em;
     letter-spacing: 1px;
     text-transform: uppercase;
-    transition: color 0.3s ease;
+    /* transition: color 0.3s ease; */
 }
 
 .song-container p {
@@ -278,7 +291,7 @@ span.black-shadow {
     height: 100%;
     background-color: #00000092;
     opacity: 0.3;
-    border-radius: 1em; 
+    border-radius: 1em;
 }
 
 .song-image {
@@ -304,9 +317,12 @@ span.black-shadow {
 }
 
 .add-song-image:hover {
-    transform: scale(1.15); /* Леко увеличаване (на 110%) */
-    box-shadow: 0px 2px 5px 0px rgba(255, 215, 0, 0.3), /* по-малка и по-прозрачна златиста сянка */
-            0px 1px 3px 0px rgba(255, 223, 0, 0.2);  /* вторична, много лека сянка */
+    transform: scale(1.15);
+    /* Леко увеличаване (на 110%) */
+    box-shadow: 0px 2px 5px 0px rgba(255, 215, 0, 0.3),
+        /* по-малка и по-прозрачна златиста сянка */
+        0px 1px 3px 0px rgba(255, 223, 0, 0.2);
+    /* вторична, много лека сянка */
 }
 
 .song-title {
@@ -390,4 +406,12 @@ span.black-shadow {
     100% {
         transform: rotate(45deg) translateX(0);
     }
+}
+
+.not-results-founded {
+    color: #fefefecf;
+    width: 24em;
+    line-height: 1.4;
+    margin-top: 2em;
+    font-size: 1.4em;
 }
