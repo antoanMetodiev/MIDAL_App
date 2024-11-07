@@ -3,6 +3,7 @@
     height: 81%;
     /* background-color: gray; */
     position: absolute;
+    z-index: 11;
     right: 0;
     bottom: 2em;
     padding-left: 8em;
