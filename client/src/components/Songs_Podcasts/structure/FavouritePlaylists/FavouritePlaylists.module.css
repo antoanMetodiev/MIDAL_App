@@ -3,7 +3,7 @@
     height: 100vh;
     width: 12em;
     position: fixed;
-    z-index: 7;
+    z-index: 27;
     /* Фиксира изображението на фона */
     top: 0;
     /* Започва от горния край на екрана */

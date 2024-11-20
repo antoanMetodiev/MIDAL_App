@@ -86,7 +86,7 @@ span.black-shadow {
 
 .options-container {
     position: fixed;
-    z-index: 5;
+    z-index: 18;
     top: 1.8em;
     left: 41em;
     display: flex;
@@ -144,19 +144,24 @@ span.black-shadow {
 .more-options-container {
     position: fixed;
     z-index: 10;
-    top: 5em;
-    right: 9em;
-    background-color: black;
-    width: 12em;
-    height: 5em;
+    top: 5.1em;
+    right: 11em;
+    background-color: silver;
     border-radius: 1em;
-    color: #fefefe;
-    padding: 2px 4px;
+    color: #000;
+    padding: 0.4em 0.4em;
+}
+
+.more-options-container h4 {
+    font-size: 1.042em;
+    border-radius: 1em;
+    padding: 0.2em 0.5em;
 }
 
 .more-options-container>h4:hover {
-    background-color: gray;
-    cursor: default;
+    background-color: #000;
+    color: #fff;
+    cursor: pointer;
 }
 
 
@@ -414,4 +419,14 @@ span.black-shadow {
     line-height: 1.4;
     margin-top: 2em;
     font-size: 1.4em;
+}
+
+img.user-image {
+    position: fixed;
+    top: 1.3em;
+    width: 2.6em;
+    border-radius: 50%;
+    object-fit: cover;
+    right: 1.2em;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
