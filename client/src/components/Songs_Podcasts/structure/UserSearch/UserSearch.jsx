@@ -5,27 +5,32 @@ import style from "./UserSearch.module.css"
 
 const UserSearch = ({
     searchTerm,
+    myUserData,
+    setMyUserDataHandler,
+    friendsRequestsContainerRef,
+    showMoreOptionsHandler,
 }) => {
     const [receivedUsers, setReceivedUsers] = useState([]);
 
     // Получен FriendList и МОЯТ FriendList..
     const [myFriendsList, setMyFriendsList] = useState([]);
+    const [invitedFriends, setInvitedFriends] = useState([]);
     const nameRef = useRef(null);
 
 
     useEffect(() => {
-        const friendsList = JSON.parse(localStorage.getItem('MIDAL_USER')).friendsList;
+        if (myUserData._id) {
+            const invPersonList = myUserData.invitedFriends;
 
-        debugger;
-        console.log(friendsList)
+            const currentUsers = [];
+            for (let i = 0; i < invPersonList.length; i++) {
+                currentUsers.push(invPersonList[i].name + "-" + (invPersonList[i].userId ? invPersonList[i].userId : invPersonList[i].id));
+            }
 
-        const currentUsers = [];
-        for (let i = 0; i < friendsList.length; i++) {
-            currentUsers.push(friendsList[i].name + "-" + friendsList[i].id);
+            setInvitedFriends(currentUsers);
         }
 
-        setMyFriendsList(currentUsers);
-    }, []);
+    }, [myUserData]);
 
     useEffect(() => {
         const solve = async () => {
@@ -47,42 +52,85 @@ const UserSearch = ({
     }, [searchTerm]);
 
 
-    const addFriend = async (id, name, imgURL) => {
+
+
+    // Invite, Close PERSON/FRIEND Functions:
+
+    let invitePerson = async (id, name, imgURL) => {
         const myData = JSON.parse(localStorage.getItem('MIDAL_USER'));
 
         debugger;
         try {
-            const message = await axios.post('http://localhost:8080/add-friend', {
-                id: id, name: name, imgURL: imgURL, myData: myData
+            const message = await axios.post('http://localhost:8080/add-friend-request', {
+                id: id, name: name, imgURL: imgURL, myData: myUserData
             });
 
+            // Добавяне и в localceStorage за да не се налага да рефрешвам:
+            const newFriend = { id: id, name: name, imgURL: imgURL };
 
+            const checkIfIsContaining = myData.invitedFriends
+                .filter(inviteRequest => inviteRequest.id == newFriend.id);
 
-            if (message.data.text === "Поканата е изпратена!") {
-                // Добавяне и в localceStorage за да не се налага да рефрешвам:
-                const newFriend = { id: id, name: name, imgURL: imgURL };
-                myData.friendsList.push(newFriend);
+            if (checkIfIsContaining.length == 0) {
+                myData.invitedFriends.push(newFriend);
                 localStorage.setItem('MIDAL_USER', JSON.stringify(myData));
 
-                const newObject = myFriendsList.slice();
-                newObject.push(newFriend);
-                setMyFriendsList(newObject);
-                console.log(newObject);
+                let invitedFriendString = `${name}-${id}`;
+                let newInvitedFriendsList = invitedFriends.slice();
+                newInvitedFriendsList.push(invitedFriendString)
+                setInvitedFriends(newInvitedFriendsList);
+
+                setMyUserDataHandler(myData);
             }
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    let cancelInvitationRequest = async (personId, name, imgURL) => {
+
+        debugger;
+        try {
+            const response = await axios.post("http://localhost:8080/cancel-primary-friend-request", {
+                myData: myUserData,
+                personData: {
+                    personId: personId,
+                    personName: name,
+                    personImgURL: imgURL
+                }
+            });
+
+            console.log(response.data.myNewUserData);
+
+            localStorage.setItem("MIDAL_USER", JSON.stringify(response.data.myNewUserData));
+            setMyUserDataHandler(response.data.myNewUserData);
+
         } catch (error) {
             console.log(error);
         }
     };
 
 
-    console.log(myFriendsList);
+    async function removeFriend(personData) {
 
-    const addedFriendOptions = () => {
+        try {
+            const response = await axios.post("http://localhost:8080/remove-friend", {
+                personData: personData,
+                myData: myUserData,
+            });
 
+            console.log(response.data.myNewUserData);
 
+            localStorage.setItem("MIDAL_USER", JSON.stringify(response.data.myNewUserData));
+            setMyUserDataHandler(response.data.myNewUserData);
+
+        } catch (error) {
+            console.log(error);
+        };
     };
 
-    console.log(myFriendsList);
+
 
     return (
         <div className={style['received-users-container']}>
@@ -98,22 +146,83 @@ const UserSearch = ({
                         <h3 ref={nameRef}>{user.username}</h3>
                         <h6>Профил</h6>
 
-                        {myFriendsList.includes(`${user.username}-${user._id}`) ? (
-                            <h4
-                                className={style['add-friend']}
-                                onClick={() => {
-                                    addedFriendOptions(user.id);
-                                }}
-                            >Приятели</h4>
-                        ) : (
+                        {myUserData.friendsList &&
+                            myUserData.friendsList
+                                .filter(friend => friend.id == user._id).length > 0
+                            ? (
+                                <>
+                                    <h4
+                                        onClick={(event) => {
+                                            let blockOrRemoveWrapperContainer = event.target.nextElementSibling;
 
-                            <h4
-                                onClick={() => {
-                                    addFriend(user._id, user.username, user.imageURL);
-                                }}
-                                className={style['add-friend']}
-                            >Добави Приятел</h4>
-                        )}
+                                            if (blockOrRemoveWrapperContainer.style.display == "none" || blockOrRemoveWrapperContainer.style.display == "") {
+                                                blockOrRemoveWrapperContainer.style.display = "block";
+                                            } else {
+                                                blockOrRemoveWrapperContainer.style.display = "none";
+                                            }
+
+                                        }}
+                                        className={style['add-friend']}
+                                    >
+                                        Приятели :
+                                    </h4>
+
+                                    <div className={style['block-remove-person-wrapper']}>
+                                        <h4 onClick={() => {
+                                            removeFriend({
+                                                personId: user._id,
+                                                personName: user.username,
+                                            });
+                                        }}>
+                                            Премахване от приятели
+                                        </h4>
+                                        <h4>Блокиране</h4>
+                                    </div>
+
+                                </>
+                            ) : myUserData.friendsRequests
+                                .filter(request => (request.requesterId ? request.requesterId : request.id) == user._id).length > 0 ? (
+                                <h4
+                                    onClick={() => {
+                                        debugger;
+                                        showMoreOptionsHandler(true);
+
+                                        console.log(friendsRequestsContainerRef.current);
+                                        if (friendsRequestsContainerRef.current) {
+
+                                            friendsRequestsContainerRef.current.style.display = "flex";
+                                        }
+                                    }}
+                                    className={style['add-friend']}
+                                >
+                                    Ви изпрати покана..
+                                </h4>
+                            ) : (
+                                <>
+                                    {!invitedFriends.includes(`${user.username}-${user._id}`) ? (
+                                        <h4
+                                            onClick={() => {
+                                                invitePerson(user._id, user.username, user.imageURL);
+                                            }}
+                                            className={style['add-friend']}
+                                        >
+                                            Добави Приятел
+                                        </h4>
+                                    ) : (
+                                        <>
+                                            <h4
+                                                className={style['add-friend']}
+                                                onClick={() => {
+
+                                                    cancelInvitationRequest(user._id, user.username, user.imageURL);
+                                                }}
+                                            >
+                                                Отмяна на поканата..
+                                            </h4>
+                                        </>
+                                    )}
+                                </>
+                            )}
 
 
                     </div>
@@ -122,5 +231,6 @@ const UserSearch = ({
         </div>
     )
 }
+
 
 export default UserSearch;
