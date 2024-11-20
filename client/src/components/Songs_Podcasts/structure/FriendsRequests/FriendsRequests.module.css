@@ -2,14 +2,14 @@
 
 .friends-requests-container {
     border-radius: 1em;
-    background-color: #121212;
+    background-color: silver;
     height: 17em;
     width: 14em;
     display: none;
 
     position: fixed;
-    z-index: 10;
-    left: 73em;
+    z-index: 40;
+    left: 71em;
     top: 4.5em;
     color: #fff;
     overflow-y: auto;
@@ -58,5 +58,6 @@
 }
 
 .accept-cancel-wrapper > h4:hover {
-    color: silver;
+    color: rgba(0, 0, 255, 0.726);
+    cursor: pointer;
 }

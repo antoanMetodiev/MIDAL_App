@@ -10,8 +10,6 @@ import updateAccessToken from "../../../GoogleAuth/utils/updateAccessToken";
 import addSongImage from "../../resources/images/add-song.png"
 import fullScreen from "../../resources/images/full_screen.png";
 
-import SongDetails from "./structure/SongDetails/SongDetails";
-
 const YouTubeSearch = ({
     searchTerm,
     onVideoSelect,
@@ -31,8 +29,7 @@ const YouTubeSearch = ({
     setSongDetailsHandler,
     under_black_shadow,
 }) => {
-
-
+    
     // const [showOrHideOptions, setShowOrHideOptions] = useState(false);
     const baseURL = 'https://www.googleapis.com/youtube/v3/search';
 
@@ -40,11 +37,9 @@ const YouTubeSearch = ({
 
         debugger;
         // Проверявам дали въобще има токен - ако няма го update-вам преди да го потърся няколко реда по надолу:
-
-
-        if (!cookies.get('access_token') || cookies.get('access_token').length < 3) {
-            updateAccessToken();
-        }
+        // if (!cookies.get('access_token') || cookies.get('access_token').length < 3) {
+        //     updateAccessToken();
+        // }
 
         // const solve = async () => {
         //     const accessToken = cookies.get('access_token'); // Извличаме токена от cookies

@@ -17,6 +17,7 @@ const Register = ({
     async function registerUser(event) {
         event.preventDefault();
 
+        debugger;
         let userData = {
             username: event.target.username.value,
             email: event.target.email.value,

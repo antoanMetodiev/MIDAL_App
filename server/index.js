@@ -18,6 +18,10 @@ app.use(express.json()); // Позволява на Express да обработ�
 app.use(cookieParser());
 app.use(routes);
 
+
+
+
+
 app.get('/api', (req, res) => {
     res.json({ message: 'Service is running successfully!' });
 });

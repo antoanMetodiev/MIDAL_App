@@ -21,7 +21,7 @@ function App() {
 		const checkSession = async () => {
 			const userData = JSON.parse(localStorage.getItem("MIDAL_USER"));
 
-			if (userData) {
+			if (userData._id) {
 				try {
 					const response = await axios.post('http://localhost:8080/is-valid-token', { _id: userData._id });
 					const responsedUser = response.data;
@@ -42,6 +42,31 @@ function App() {
 		checkSession();
 
 	}, []);
+
+
+	// На нивото на App-a - правя заявка за да се абонирам за канал в Redis,
+	// който ще ми казва дали някой ми е изпратил покана в реално време..
+	useEffect(() => {
+
+		if (userData._id) {
+			try {
+				const subscribeForRequestProvider = async () => {
+					const response = await axios.post("http://localhost:8080/friends-requests-channel-provider", {
+						myNames: userData.username,
+						myId: userData._id,
+					});
+					console.log(response.data);
+					
+
+				}
+
+				subscribeForRequestProvider();
+			} catch (error) {
+				console.log(error);
+			}
+		}
+
+	}, [userData]);
 
 
 	// Functions:
