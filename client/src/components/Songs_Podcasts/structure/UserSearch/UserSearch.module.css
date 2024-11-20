@@ -3,7 +3,7 @@
     height: 81%;
     /* background-color: gray; */
     position: absolute;
-    z-index: 11;
+    z-index: 7;
     right: 0;
     bottom: 2em;
     padding-left: 8em;
@@ -27,6 +27,11 @@
     align-items: center;
     padding: 5px;
     height: 17.5em;
+    transition: transform 0.3s ease; /* Плавен преход за трансформацията */
+}
+
+.user-container:hover {
+    transform: scale(1.02); /* Увеличаване на размера на 5% при ховър */
 }
 
 .user-container>h3,
@@ -68,5 +73,27 @@
 
 .add-friend:hover {
     background-color: gray;
+    cursor: pointer;
+}
+
+.block-remove-person-wrapper {
+    background-color: silver;
+    border-radius: 1em;
+    padding: 0.4em 0.5em;
+    position: absolute;
+    bottom: -4em;
+    right: 0;
+
+    display: none;
+}
+
+.block-remove-person-wrapper h4 {
+    padding: 0.1em 0.3em;
+    border-radius: 1em;
+}
+
+.block-remove-person-wrapper h4:hover {
+    background-color: #000;
+    color: #ffff;
     cursor: pointer;
 }

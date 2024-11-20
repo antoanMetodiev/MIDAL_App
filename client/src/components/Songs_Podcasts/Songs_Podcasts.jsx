@@ -26,10 +26,12 @@ import io from 'socket.io-client';
 
 const socket = io('http://localhost:8090'); // Свързване към Socket.io сървъра
 
+let isCheckedForNewFriendsRequests = false;
+let wasSubscribed = false;
+
 const Songs_Podcasts = () => {
-    // States:
     const location = useLocation();
-    const under_black_shadow = useRef(null);
+    // States:
     const [myUserData, setMyUserData] = useState({});
     const [searchTerm, setSearchTerm] = useState('');
     const [searchLocation, setSearchLocation] = useState("Музика & Подкасти");
@@ -60,6 +62,10 @@ const Songs_Podcasts = () => {
     const searchEngineRef = useRef(null);
     const requestNewSongH3 = useRef(null);
     const userDetailsH3 = useRef(null);
+    const under_black_shadow = useRef(null);
+    const friendsRequestsContainerRef = useRef(null);
+
+    // console.log(friendsRequestsContainerRef.current);
 
     // Functions:
     function setCurrentListeningSongHandler(newListeningSong) {
@@ -74,11 +80,144 @@ const Songs_Podcasts = () => {
         setMyUserData(newUserData);
     }
 
-
     useEffect(() => {
         if (myUserData.myPlaylists) {
             console.log(myUserData.myPlaylists);
             setPlaylistTypes(myUserData.myPlaylists);
+        }
+
+    }, [myUserData]);
+
+
+    // CANCEL ONLY (REAL-TIME PROVIDER)
+    useEffect(() => {
+        if (myUserData._id) {
+            async function solve() {
+                try {
+                    const response = await axios.post("http://localhost:8080/cancel-request-listener", {
+                        myId: myUserData._id,
+                        myName: myUserData.username,
+                    });
+
+                } catch (error) {
+                    console.log(error);
+                }
+            };
+            solve();
+
+            // Слушаме за събития, когато някои си отмени поканата за приятелство към мен..
+            socket.on(`cancel-request-listener_${myUserData._id}`, (message) => {
+
+                const myNewUserData = JSON.parse(message).personNewUserData;
+                console.log(JSON.parse(message).personNewUserData);
+                localStorage.setItem("MIDAL_USER", JSON.stringify(myNewUserData));
+                setMyUserData(myNewUserData);
+            });
+
+            return () => {
+                socket.off(`cancel-request-listener_${myUserData._id}`);
+            };
+        }
+    }, [myUserData]);
+
+
+    // ACCEPT ONLY (REAL-TIME PROVIDER)
+    useEffect(() => {
+        if (myUserData._id) {
+            async function solve() {
+                try {
+                    const response = await axios.post("http://localhost:8080/accept-request-listener", {
+                        myId: myUserData._id,
+                        myName: myUserData.username,
+                    });
+
+                } catch (error) {
+                    console.log(error);
+                }
+            };
+            solve();
+
+            // Слушаме за събития, когато някои си отмени поканата за приятелство към мен..
+            socket.on(`accept-request-listener_${myUserData._id}`, (message) => {
+
+                const myNewUserData = JSON.parse(message).personNewUserData;
+                console.log(JSON.parse(message).personNewUserData);
+                localStorage.setItem("MIDAL_USER", JSON.stringify(myNewUserData));
+                setMyUserData(myNewUserData);
+            });
+
+            return () => {
+                socket.off(`accept-request-listener_${myUserData._id}`);
+            };
+        }
+    }, [myUserData]);
+
+
+
+    // На нивото на App-a - правя заявка за да се абонирам за канал в Redis,
+    // който ще ми казва дали някой ми е изпратил покана в реално време..
+    useEffect(() => {
+
+        // Мой канал към които потребителите ще note-ват, когато ми изпратят покана..
+        if (myUserData._id) {
+            // wasSubscribed = true;
+
+            try {
+                const subscribeForRequestProvider = async () => {
+                    await axios.post("http://localhost:8080/friends-requests-channel-provider", {
+                        myNames: myUserData.username,
+                        myId: myUserData._id,
+                    });
+                }
+                subscribeForRequestProvider();
+
+                // ПРОВЯРЯВАМ ДАЛИ ИМАМ НОВИ ПОКАНИ ЗА FRIENDS:
+                async function checkForNewRequests() {
+                    try {
+                        console.log("NIKVAAAAAAAAAAAAA");
+                        const response = await axios.post("http://localhost:8080/check-for-new-friend-requests", { myId: myUserData._id });
+                        console.log(response.data.myNewData);
+                        localStorage.setItem("MIDAL_USER", JSON.stringify(response.data.myNewData));
+                        setMyUserDataHandler(response.data.myNewData);
+
+                    } catch (error) {
+                        console.log("Проблем при първоначално запитване за нови покани за приятелство" + error);
+                    }
+                }
+                // Този if - представлява лимитация да се случва това само един път..
+                if (!isCheckedForNewFriendsRequests) {
+                    isCheckedForNewFriendsRequests = true;
+                    checkForNewRequests();
+                };
+
+
+                // Слушаме за събития за нови заявки за приятелство
+                socket.on(`friend_request_${myUserData._id}`, (friendRequest) => {
+
+                    console.log("TEEEEEEENEVAAAAAAAAAAAAAAA");
+                    console.log(JSON.parse(friendRequest).userRequester);
+                    const newMyUserData = JSON.parse(localStorage.getItem("MIDAL_USER"));
+
+                    const newFriendRequest = JSON.parse(friendRequest).userRequester;
+
+                    const checkIfIsContained = newMyUserData.friendsRequests
+                        .filter(request => request.requesterId == newFriendRequest.requesterId);
+
+                    console.log(checkIfIsContained.length == 0);
+                    if (checkIfIsContained.length == 0) {
+                        newMyUserData.friendsRequests.push(newFriendRequest);
+                        localStorage.setItem("MIDAL_USER", JSON.stringify(newMyUserData));
+
+                        setMyUserData(newMyUserData);
+                    }
+                });
+
+                return () => {
+                    socket.off(`friend_request_${myUserData._id}`);
+                };
+            } catch (error) {
+                console.log(error);
+            }
         }
 
     }, [myUserData]);
@@ -194,7 +333,6 @@ const Songs_Podcasts = () => {
             if (songTitle.length > 1) {
                 // Изпращане сървъра и след това на Redis (заяване че слушам сега тази песен):
                 try {
-
                     const responseMessage = await axios.post('http://localhost:8080/publish-song', { myId: myId, songTitle: songTitle, myName: myUserData.username, imgURL: img });
                     console.log(responseMessage.data);
                     debugger;
@@ -208,22 +346,8 @@ const Songs_Podcasts = () => {
                         objForSet = obj;
                     }
 
-                    // if (!lastListenedSongForMe) {
-                    //     objForSet = obj;
-                    // } else {
-                    //     objForSet = lastListenedSongForMe;
-                    // }
-
-
                     localStorage.setItem("LAST_LISTENED_SONG", JSON.stringify(objForSet));
                     console.log('Направих заявяване в канала каква песен слушам..');
-
-
-                    // setTimeout(() => {
-                    //     debugger;
-                    //     videoDataOriginal = {};
-                    //     publishSongOperation();
-                    // }, 30000);
 
                 } catch (error) {
                     if (error.response) {
@@ -278,7 +402,6 @@ const Songs_Podcasts = () => {
 
     useEffect(() => {
 
-
         if (location.pathname == '/songs-podcasts') {
             const data = JSON.parse(localStorage.getItem('MIDAL_USER'));
 
@@ -320,9 +443,8 @@ const Songs_Podcasts = () => {
         // Слушател за излизане от приложението (затваряне на таб, браузър и т.н.)
         const handleUnload = (e) => {
             removeUser();
-            // Възможно е да покажем предупредителен диалог (опционално)
             e.preventDefault();
-            e.returnValue = ''; // Стандартна практика за показване на диалог в някои браузъри
+            e.returnValue = '';
         };
 
         window.addEventListener('beforeunload', handleUnload);
@@ -407,7 +529,17 @@ const Songs_Podcasts = () => {
     };
 
 
-    const showMoreOptionsHandler = (event) => {
+    const [prerender, setPrerender] = useState(false);
+    let setPrerenderHandler = (value) => {
+        setPrerender(value);
+    }
+
+    const showMoreOptionsHandler = (show) => {
+        if (show) {
+            setShowMoreOptions(true)
+            setPrerender(true);
+        }
+
         if (!showMoreOptions) {
             setShowMoreOptions(true);
         } else {
@@ -435,7 +567,19 @@ const Songs_Podcasts = () => {
                         <h3 ref={userProfilesH3} onClick={changeSearch}>Профили</h3>
                         <h3 ref={userDetailsH3} onClick={changeSearch}>Акаунт</h3>
                         <h3 ref={requestNewSongH3} onClick={changeSearch}>Заяви Песен/Подкаст</h3>
-                        <img onClick={showMoreOptionsHandler} className={style['more-options-img']} src={planetImg} alt="show" />
+                        <img
+                            onClick={() => {
+                                showMoreOptionsHandler();
+                            }}
+                            className={style['more-options-img']} src={planetImg} alt="show"
+                        />
+                        {myUserData._id && (
+                            <img
+                                className={style['user-image']}
+                                src={myUserData.imageURL}
+                                alt={myUserData.imageURL}
+                            />
+                        )}
                     </section>
 
                     <span className={style['white-border-radius-wrapper-container']}></span>
@@ -465,10 +609,6 @@ const Songs_Podcasts = () => {
 
                 {showMoreOptions && (
                     <>
-                        <div>
-                            mao
-                        </div>
-
                         <section
                             onClick={(event) => {
                                 debugger;
@@ -487,13 +627,18 @@ const Songs_Podcasts = () => {
                             <h4>Блокирани потребители</h4>
                         </section>
 
-                        <FriendsRequests myUserData={myUserData} />
+                        <FriendsRequests
+                            myUserData={myUserData}
+                            setMyUserDataHandler={setMyUserDataHandler}
+                            friendsRequestsContainerRef={friendsRequestsContainerRef}
+                            prerender={prerender}
+                            setPrerenderHandler={setPrerenderHandler}
+                        />
                     </>
                 )}
 
 
                 <ListeningFriends myFriendsListens={myFriendsListens} />
-
 
 
                 {searchLocation == "Музика & Подкасти" ? (
@@ -516,7 +661,13 @@ const Songs_Podcasts = () => {
                         setSongDetailsHandler={setSongDetailsHandler}
                     />
                 ) : searchLocation == "Профили" ? (
-                    <UserSearch searchTerm={searchTerm} />
+                    <UserSearch
+                        searchTerm={searchTerm}
+                        myUserData={myUserData}
+                        setMyUserDataHandler={setMyUserDataHandler}
+                        friendsRequestsContainerRef={friendsRequestsContainerRef}
+                        showMoreOptionsHandler={showMoreOptionsHandler}
+                    />
                 ) : searchLocation == "Заяви Песен/Подкаст" ? (
                     <RequestSongOrPodcast searchTerm={searchTerm} />
                 ) : (

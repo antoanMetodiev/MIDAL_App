@@ -11,7 +11,7 @@
     border-radius: 1em;
     display: flex;
     flex-direction: column;
-    gap: 3%;
+    gap: 3.8%;
     align-items: center;
     padding-block: 0.6em 0.5em;
     /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);  */
@@ -64,6 +64,7 @@
     position: absolute;
     z-index: -1;
     background-color: #fefefe88;
+    background-color: rgb(192, 192, 192);
     height: 0.2em;
     width: 2em;
     right: 3.5em;
@@ -75,7 +76,7 @@
     font-size: 0.87em;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Черна сянка */
     left: -17.4em;
-    top: 0em;
+    top: 0.3em;
     position: absolute;
     z-index: 5;
     width: 15em;
@@ -89,7 +90,7 @@
 }
 
 .song-title:hover {
-    transform: scale(1.05); /* Леко увеличение при hover */
+    transform: scale(1.04); /* Леко увеличение при hover */
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.7); /* По-силна сянка при hover */
 }
 
@@ -112,7 +113,7 @@
 
 .openFriendList {
     position: fixed;
-    z-index: 11;
+    z-index: 15;
     bottom: 5em;
     right: 1em;
     width: 2.2em;
@@ -143,7 +144,7 @@
     position: fixed;
     bottom: 5em;
     right: 1em;
-    z-index: 11;
+    z-index: 15;
     background-color: #000000dd;
     color: #fefefec3;
     padding: 4px 9px;
