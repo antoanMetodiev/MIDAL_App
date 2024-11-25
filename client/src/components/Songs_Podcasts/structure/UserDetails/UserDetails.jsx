@@ -1,16 +1,41 @@
-
-
-
 import style from "./UserDetails.module.css";
 
-const UserDetails = () => {
+import Header from "./structure/Header/Header";
+import Body from "./structure/Body/Body";
+import { useEffect, useState } from "react";
 
 
+const UserDetails = ({
+    userDetailsData,
+    handleVideoSelect,
+    myUserData,
+    setMyUserDataHandler,
+    optionsContainerRef,
+    setShowUserDetailsHandler,
+}) => {
+    const [showConcreteCategoryString, setShowConcreteCategoryString] = useState("Published_Playlists");
+
+    useEffect(() => {
+        optionsContainerRef.current.style.display = "none";
+    });
 
     return (
-        <div className={style['user-details-container']}>
+        <article className={style['user-details-container']}>
 
-        </div>
+            <Header
+                userDetailsData={userDetailsData}
+                setShowConcreteCategoryString={setShowConcreteCategoryString}
+                optionsContainerRef={optionsContainerRef}
+                setShowUserDetailsHandler={setShowUserDetailsHandler}
+            />
+            <Body
+                handleVideoSelect={handleVideoSelect}
+                userDetailsData={userDetailsData}
+                showConcreteCategoryString={showConcreteCategoryString}
+                myUserData={myUserData}
+                setMyUserDataHandler={setMyUserDataHandler}
+            />
+        </article>
     );
 }
 
