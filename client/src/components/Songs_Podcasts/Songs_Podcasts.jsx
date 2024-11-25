@@ -29,6 +29,11 @@ const socket = io('http://localhost:8090'); // Свързване към Socket.
 let isCheckedForNewFriendsRequests = false;
 let wasSubscribed = false;
 
+// function handleVideoSelect(videoId) {
+//     setSelectedVideoId(videoId);
+// };
+
+
 const Songs_Podcasts = () => {
     const location = useLocation();
     // States:
@@ -43,6 +48,7 @@ const Songs_Podcasts = () => {
     const [currentListeningSong, setCurrentListeningSong] = useState({});
     const [iListenThisSong, setIListenThisSong] = useState({});
     const [myFriendsListens, setMyFriendsListens] = useState([]);
+
 
     // PLAYLIST TYPES:
     const [playlistTypes, setPlaylistTypes] = useState({});
@@ -64,6 +70,7 @@ const Songs_Podcasts = () => {
     const userDetailsH3 = useRef(null);
     const under_black_shadow = useRef(null);
     const friendsRequestsContainerRef = useRef(null);
+    const optionsContainerRef = useRef(null);
 
     // console.log(friendsRequestsContainerRef.current);
 
@@ -486,7 +493,7 @@ const Songs_Podcasts = () => {
         }
     };
 
-    const handleVideoSelect = (videoId) => {
+    function handleVideoSelect(videoId) {
         setSelectedVideoId(videoId);
     };
 
@@ -562,7 +569,10 @@ const Songs_Podcasts = () => {
 
 
                 <div ref={searchEngine_optionsContainerWrapperRef}>
-                    <section className={style['options-container']}>
+                    <section
+                        ref={optionsContainerRef} 
+                        className={style['options-container']}
+                    >
                         <h3 ref={songsAndPodcastsH3} onClick={changeSearch}>Музика & Подкасти</h3>
                         <h3 ref={userProfilesH3} onClick={changeSearch}>Профили</h3>
                         <h3 ref={userDetailsH3} onClick={changeSearch}>Акаунт</h3>
@@ -661,17 +671,21 @@ const Songs_Podcasts = () => {
                         setSongDetailsHandler={setSongDetailsHandler}
                     />
                 ) : searchLocation == "Профили" ? (
-                    <UserSearch
-                        searchTerm={searchTerm}
-                        myUserData={myUserData}
-                        setMyUserDataHandler={setMyUserDataHandler}
-                        friendsRequestsContainerRef={friendsRequestsContainerRef}
-                        showMoreOptionsHandler={showMoreOptionsHandler}
-                    />
-                ) : searchLocation == "Заяви Песен/Подкаст" ? (
+                    <>
+                        <UserSearch
+                            searchTerm={searchTerm}
+                            myUserData={myUserData}
+                            setMyUserDataHandler={setMyUserDataHandler}
+                            friendsRequestsContainerRef={friendsRequestsContainerRef}
+                            showMoreOptionsHandler={showMoreOptionsHandler}
+                            handleVideoSelect={handleVideoSelect}
+                            optionsContainerRef={optionsContainerRef}
+                        />
+
+                        {/* <UserDetails handleVideoSelect={handleVideoSelect} /> */}
+                    </>
+                ) : searchLocation == "Заяви Песен/Подкаст"(
                     <RequestSongOrPodcast searchTerm={searchTerm} />
-                ) : (
-                    <UserDetails />
                 )}
 
                 {showSongDetails && (
