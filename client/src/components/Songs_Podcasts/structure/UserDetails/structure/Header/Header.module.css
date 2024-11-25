@@ -1,0 +1,118 @@
+
+.user-details-header {
+    position: relative;
+    margin-left: 12em;
+    width: 100%;
+    height: 11em;
+    /* background: linear-gradient(to top, #2a2a2ad0, #404040, #808080); */
+    background: linear-gradient(to top, #3a3a3a, #606060, #a0a0a0);
+    box-shadow: 0px 6px 10px rgba(192, 192, 192, 0.7); 
+}
+
+.img-name-wrapper-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 1.2em;
+    position: absolute;
+    bottom: 0.8em;
+    left: 2em;
+}
+
+.img-name-wrapper-container .profile-image {
+    width: 9.6em;
+    height: 9.6em;
+    margin-top: 5px;
+    border-radius: 50%;
+    /* box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.6); */
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.img-name-wrapper-container .profile-text {
+    position: absolute;
+    left: 14em;
+    bottom: 5.8em;
+    /* font-style: italic; */
+    letter-spacing: 1px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: #EEEEEE;
+    font-size: 0.8em;
+    cursor: default;
+    border-bottom: 0.5px solid #EEEEEE;
+}
+
+.img-name-wrapper-container .name {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-style: italic;
+    font-size: 2.5em;
+    letter-spacing: 1px;
+    color: #EEEEEE;
+    font-weight: 400;
+    align-self: flex-end;
+    margin-bottom: 0.5em;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    cursor: default;
+}
+
+.friends_playlists-count-wrapper-container {
+    position: absolute;
+    bottom: 0.5em;
+    left: 13em;
+    display: flex;
+    gap: 0.5em;
+    color: #D9D9D9;
+}
+
+.friends_playlists-count-wrapper-container h5 {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 0.8em;
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: #D9D9D9;
+    font-style: italic;
+    cursor: pointer;    
+}
+
+.friends_playlists-count-wrapper-container h5:hover {
+    border-bottom: 1px solid #fff;
+    cursor: pointer;
+}
+
+.options-container {
+    position: absolute;
+    left: 37.5em;
+    bottom: 0.3em;
+    display: flex;
+    gap: 1.5em;
+
+}
+
+.options-container h5 {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: #fff;
+    font-size: 1em;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.options-container h5:hover {
+    color: silver;
+}
+
+.publish-playlist-category-h5 {
+    border-bottom: 0.3px solid #EEEEEE;
+}
+
+
+.back-to-usersList-img {
+    position: absolute;
+    width: 2em;
+    top: 4px;
+    left: 8px;
+
+    transition: transform 0.3s ease; /* Плавен преход при увеличаване */
+}
+
+.back-to-usersList-img:hover {
+    transform: scale(1.1); /* Увеличаване на размера с 20% */
+}
