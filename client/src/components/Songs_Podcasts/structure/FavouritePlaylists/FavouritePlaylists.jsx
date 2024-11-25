@@ -6,6 +6,7 @@ import showCurrentPlaylist from "../../resources/images/show-current-playlist.pn
 import playSongsOnPlaylists from "../../resources/images/play-music-on-playlist.png";
 import addNewPlaylistImg from "../../resources/images/add-playlist.png"
 import chooseImage from "../../resources/images/choose-image.png";
+import publishPlaylistImage from "../../resources/images/publish-playlist.png";
 
 import likedSongsPlaylistImage from "../../resources/images/liked-songs-playlist.png"
 import starImage from "../../resources/images/star.png";
@@ -28,7 +29,7 @@ const FavouritePlaylists = ({
     setMyUserDataHandler
 }) => {
 
-    console.log(myUserData);
+
 
     function showSongsFromPlaylistHandler(event) {
         const concretePlaylistContainer = event.target.parentElement;
@@ -46,7 +47,7 @@ const FavouritePlaylists = ({
             concretePlaylistContainer.style.backgroundColor = "#000";
             concreteSongsContainer.style.backgroundColor = "#000";
             // concretePlaylistContainer.style.top = "-13.5em"
-            allPlaylistsElement.style.overflowY = "hidden"; 
+            allPlaylistsElement.style.overflowY = "hidden";
         } else {
             event.target.nextElementSibling.style.display = 'none';
             concretePlaylistContainer.style.marginBottom = "0em";
@@ -55,7 +56,7 @@ const FavouritePlaylists = ({
             concretePlaylistContainer.style.top = "0";
             concretePlaylistContainer.style.zIndex = "0";
             concretePlaylistContainer.style.backgroundColor = "rgba(128, 128, 128, 0.785)";
-            allPlaylistsElement.style.overflowY = "auto"; 
+            allPlaylistsElement.style.overflowY = "auto";
             concretePlaylistContainer.style.left = "0";
         }
     }
@@ -71,12 +72,16 @@ const FavouritePlaylists = ({
     const addPlaylistFormRef = useRef(null);
     const noName_and_imageRef = useRef(null);
     const choosenImageRef = useRef(null);
+    const choosePlaylistContainerRef = useRef(null);
+    const showCurrentPlaylistContainerRef = useRef(null);
 
     let showWantToAddPlaylistHandler = () => {
         noName_and_imageRef.current.style.display = "none";
 
         if (addPlaylistFormRef.current.style.display === "none" || addPlaylistFormRef.current.style.display === "") {
             addPlaylistFormRef.current.style.display = "flex";
+            choosePlaylistContainerRef.current.style.display = "none";
+            showCurrentPlaylistContainerRef.current.style.display = "none";
         } else {
             addPlaylistFormRef.current.style.display = "none";
         }
@@ -86,14 +91,19 @@ const FavouritePlaylists = ({
         event.preventDefault();
         const myId = JSON.parse(localStorage.getItem("MIDAL_USER"))._id;
 
-        const playlistName = event.target.playlist_name.value;
-
         debugger;
+        let playlistName = event.target.playlist_name.value;
+        if (playlistName.length > 0) {
+            
+            playlistName = playlistName.split(".").join("");
+        }
+
+        
         if (playlistName.length > 0 && playlistName.length <= 18) {
             noName_and_imageRef.current.style.display = "none";
             event.target.reset();
 
-            debugger;
+          
             if (playlistTypes.Харесани && !Object.keys(playlistTypes).includes(playlistName)) {
                 console.log("Можеш да го създадеш..");
 
@@ -129,6 +139,34 @@ const FavouritePlaylists = ({
         }
     }
 
+
+    const publishPlaylistHandler = async (playlistObject) => {
+        const previousPublishedPlaylistsCount = myUserData.myPublishedPlaylists.length;
+
+        // playlistName
+        debugger;
+        if (previousPublishedPlaylistsCount > 0) {
+            const result = myUserData.myPublishedPlaylists
+                .filter(publishedPlaylist => publishedPlaylist.playlistName == playlistObject.playlistName);
+
+            if (result.length > 0) return;
+        }
+
+        try {
+            const response = await axios.post("http://localhost:8080/publish-playlist", {
+                myId: myUserData._id,
+                playlistObject
+            });
+
+            if (response.data.newMyUserData.myPublishedPlaylists.length > previousPublishedPlaylistsCount) {
+                localStorage.setItem("MIDAL_USER", JSON.stringify(response.data.newMyUserData));
+                setMyUserDataHandler(response.data.newMyUserData);
+            }
+        } catch (error) {
+            console.log();
+        }
+    };
+
     return (
         <>
             {/* Favorite Playlists: */}
@@ -153,6 +191,25 @@ const FavouritePlaylists = ({
                             }}
                             src={addNewPlaylistImg}
                             alt="addNewPlaylistImg"
+                        />
+                        <img
+                            onClick={() => {
+                                debugger;
+                                let displayValue = choosePlaylistContainerRef.current.style.display;
+                                if (displayValue == "none" || displayValue == "") {
+                                    choosePlaylistContainerRef.current.style.display = "flex";
+                                    addPlaylistFormRef.current.style.display = "none";
+                                    console.log(showCurrentPlaylistContainerRef.current);
+                                    showCurrentPlaylistContainerRef.current.style.display = "none";
+                                    // showCurrentPlaylistContainerRef.current.style.setProperty("display", "none", "important");
+
+                                } else {
+                                    choosePlaylistContainerRef.current.style.display = "none";
+                                }
+                            }}
+                            className={style['publish-playlist-image']}
+                            src={publishPlaylistImage}
+                            alt="publishPlaylistImage"
                         />
                     </div>
 
@@ -180,6 +237,35 @@ const FavouritePlaylists = ({
                     <label ref={noName_and_imageRef} className={style['no-name-and-image']}>Моля, поставете име до 18 символа..</label>
 
 
+                    {/* CHOOSE PLAYLIST FOR PUBLISH: */}
+                    <div
+                        ref={choosePlaylistContainerRef}
+                        className={style['choose-playlist-container']}
+                    >
+                        <h4 className={style['publish-playlist-title']}>Публикувай плейлист:</h4>
+
+                        {myUserData.myPlaylists &&
+                            Object.keys(myUserData.myPlaylists).map(playlistKey => {
+                                return (
+                                    <div
+                                        onClick={() => {
+                                            debugger;
+                                            let obj = myUserData.myPlaylists[playlistKey];
+                                            obj.playlistName = playlistKey;
+                                            publishPlaylistHandler(obj);
+                                        }}
+                                        className={style['publish-playlist']}
+                                    >
+                                        {/* <img src={playlistIcons[myUserData.myPlaylists[playlistKey].imgURL]} alt="playlist_IMAGE" /> */}
+                                        <h5>♫ {playlistKey}</h5>
+                                    </div>
+                                )
+                            })}
+
+                    </div>
+
+                    
+
                     <section className={style['all-playlists-container']}>
 
                         {playlistTypes && Object.keys(playlistTypes).length > 0 && (
@@ -199,7 +285,11 @@ const FavouritePlaylists = ({
                                         />
 
 
-                                        <section className={style['playlist-songs-container']}>
+
+                                        <section
+                                            ref={showCurrentPlaylistContainerRef}
+                                            className={style['playlist-songs-container']}
+                                        >
 
                                             {playlistTypes.Харесани && (
                                                 playlistTypes[playlistKey].songs.map((songObject, index) => {
@@ -221,10 +311,6 @@ const FavouritePlaylists = ({
                             })
                         )}
                     </section>
-
-
-
-
 
                 </section>
             </aside>
