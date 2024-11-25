@@ -17,9 +17,6 @@ const UserSchema = new mongoose.Schema({
     imageURL: {
         type: String,
     },
-    // secret_world: {
-    //     type: String,
-    // },
 
     
     friendsList: [{
@@ -34,9 +31,9 @@ const UserSchema = new mongoose.Schema({
     blockedUsers: [{
         type: Object,
     }],
-    closeFriends: [{
-        type: Object,
-    }],
+    // closeFriends: [{
+    //     type: Object,
+    // }],
     myPlaylists: {
         type: Object,
         default: {
@@ -50,6 +47,9 @@ const UserSchema = new mongoose.Schema({
         type: Object,
     }],
     myStories: [{
+        type: Object,
+    }],
+    myPictures: [{
         type: Object,
     }],
 });
