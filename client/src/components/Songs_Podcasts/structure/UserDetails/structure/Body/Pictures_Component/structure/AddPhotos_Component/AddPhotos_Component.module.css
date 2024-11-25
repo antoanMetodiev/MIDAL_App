@@ -1,0 +1,8 @@
+.add-photos-container {
+    width: 9em;
+    height: 11em;
+
+    display: none;
+    margin-top: 3em;
+    position: relative;
+}
