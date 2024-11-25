@@ -85,21 +85,6 @@ const YouTubeAudioPlayer = ({
 							}
 						}
 
-						console.log(event.target.getVideoUrl());
-						currentSongURL.current = event.target.getVideoUrl();
-
-						console.log(event.target.getDuration());
-
-						// Обновяване на текущото време на всяка секунда
-						// setInterval(() => {
-						// 	setCurrentTime(event.target.getCurrentTime());
-						// }, 1000);
-
-						debugger;
-
-						// Получаване на информация за видеото
-						const videoData = event.target.getVideoData();
-
 						setTimeout(() => {
 							up_WallRef.current.style.display = "none";
 							down_WallRef.current.style.display = "none";
