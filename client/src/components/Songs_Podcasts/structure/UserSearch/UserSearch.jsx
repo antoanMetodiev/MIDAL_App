@@ -1,7 +1,8 @@
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
-
+import { useDebugValue, useEffect, useRef, useState } from "react";
 import style from "./UserSearch.module.css"
+
+import UserDetails from "../UserDetails/UserDetails";
 
 const UserSearch = ({
     searchTerm,
@@ -9,13 +10,24 @@ const UserSearch = ({
     setMyUserDataHandler,
     friendsRequestsContainerRef,
     showMoreOptionsHandler,
+    handleVideoSelect,
+    optionsContainerRef,
 }) => {
     const [receivedUsers, setReceivedUsers] = useState([]);
 
     // Получен FriendList и МОЯТ FriendList..
     const [myFriendsList, setMyFriendsList] = useState([]);
     const [invitedFriends, setInvitedFriends] = useState([]);
+    const [showUserDetails, setShowUserDetails] = useState(false);
+
+    let [userDetailsData, setUserDetailsData] = useState({});
+
+    // References:
     const nameRef = useRef(null);
+
+    function setShowUserDetailsHandler(value) {
+        setShowUserDetails(value);
+    }
 
 
     useEffect(() => {
@@ -59,7 +71,6 @@ const UserSearch = ({
     let invitePerson = async (id, name, imgURL) => {
         const myData = JSON.parse(localStorage.getItem('MIDAL_USER'));
 
-        debugger;
         try {
             const message = await axios.post('http://localhost:8080/add-friend-request', {
                 id: id, name: name, imgURL: imgURL, myData: myUserData
@@ -89,8 +100,6 @@ const UserSearch = ({
     };
 
     let cancelInvitationRequest = async (personId, name, imgURL) => {
-
-        debugger;
         try {
             const response = await axios.post("http://localhost:8080/cancel-primary-friend-request", {
                 myData: myUserData,
@@ -111,9 +120,7 @@ const UserSearch = ({
         }
     };
 
-
     async function removeFriend(personData) {
-
         try {
             const response = await axios.post("http://localhost:8080/remove-friend", {
                 personData: personData,
@@ -130,12 +137,31 @@ const UserSearch = ({
         };
     };
 
+    let showUserDetailsComponent = async (currentUserDetailsData) => {
+        const personId = currentUserDetailsData.id;
 
+        try {
+            const response = await axios.post("http://localhost:8080/get-user-data", { personId });
+            console.log(response.data.personData);
+
+            if (!showUserDetails) {
+                setShowUserDetails(true);
+                setUserDetailsData(response.data.personData);
+            } else {
+                setShowUserDetails(false);
+            };
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    console.log(userDetailsData);
 
     return (
         <div className={style['received-users-container']}>
 
-            {receivedUsers.length > 0 && (
+            {(receivedUsers.length > 0 && !showUserDetails) && (
                 receivedUsers.map(user => (
                     <div className={style['user-container']} key={user._id}>
                         <img
@@ -144,7 +170,17 @@ const UserSearch = ({
                             alt="User Avatar"
                         />
                         <h3 ref={nameRef}>{user.username}</h3>
-                        <h6>Профил</h6>
+                        <h6
+                            className={style['look-profile']}
+                            onClick={() => {
+                                showUserDetailsComponent({
+                                    id: user._id,
+                                    name: user.username,
+                                    imgURL: user.imageURL,
+                                });
+                            }}>
+                            Виж Профил
+                        </h6>
 
                         {myUserData.friendsList &&
                             myUserData.friendsList
@@ -228,6 +264,18 @@ const UserSearch = ({
                     </div>
                 ))
             )}
+
+            {showUserDetails &&
+                <UserDetails
+                    userDetailsData={userDetailsData}
+                    handleVideoSelect={handleVideoSelect}
+                    myUserData={myUserData}
+                    setMyUserDataHandler={setMyUserDataHandler}
+                    optionsContainerRef={optionsContainerRef}
+                    setShowUserDetailsHandler={setShowUserDetailsHandler}
+                />
+            }
+
         </div>
     )
 }
