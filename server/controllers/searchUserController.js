@@ -13,4 +13,18 @@ app.post("/search-user", async (req, res) => {
 });
 
 
+app.post("/get-user-data", async (req, res) => {
+    const { personId } = req.body;
+
+    try {
+        const personData = await UserModel.findById(personId);
+        return res.json({ personData });
+
+    } catch (error) {
+        console.log(error);
+        return res.json({});
+    }
+});
+
+
 module.exports = app; 
