@@ -26,8 +26,6 @@
     width: 98.6%;
     height: 7em;
     object-fit: cover;
-    border-top-right-radius: 0.5em;
-    border-bottom-right-radius: 0.2em;
 }
 
 .another-black-shadow {
@@ -169,12 +167,17 @@
 /* Дефиниция на анимацията */
 @keyframes slideInFromLeft {
     from {
-        transform: translateX(-100%); /* Започва извън екрана */
-        opacity: 0; /* Прозрачен в началото */
+        transform: translateX(-100%);
+        /* Започва извън екрана */
+        opacity: 0;
+        /* Прозрачен в началото */
     }
+
     to {
-        transform: translateX(0); /* Позиция на оригиналното място */
-        opacity: 1; /* Напълно видим */
+        transform: translateX(0);
+        /* Позиция на оригиналното място */
+        opacity: 1;
+        /* Напълно видим */
     }
 }
 
@@ -213,7 +216,7 @@ span.song-title {
 
 .playlist-h2-and-img-container {
     display: flex;
-    gap: 1em;
+    gap: 0.5em;
     align-items: center;
     margin-left: 1px;
     margin-top: -0.6em;
@@ -222,6 +225,11 @@ span.song-title {
 .playlist-h2-and-img-container>img {
     width: 1.7em;
     height: 1.7em;
+    transition: transform 0.3s ease; /* Плавен преход за зуума */
+}
+
+.playlist-h2-and-img-container > img:hover {
+    transform: scale(1.12); /* Леко увеличаване на размера при hover */
 }
 
 /* WANT-TO-ADD-PLAYLIST-FORM: */
@@ -288,7 +296,8 @@ span.song-title {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-size: 0.9em;
     text-align: center;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Черна сянка */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    /* Черна сянка */
 }
 
 .icons-container {
@@ -358,4 +367,51 @@ span.song-title {
     /* Фон на пистата на скрол бара */
     width: 1px;
     /* Ширина на скрол бара */
+}
+
+.publish-playlist-image {
+    font-size: 1em;
+    margin-top: -6px;
+}
+
+.choose-playlist-container {
+    width: 100%;
+    height: 8em;
+    margin-top: 2.5em;
+    
+    background-color: silver;
+    border-radius: 1em;
+
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.publish-playlist {
+    display: flex;
+    gap: 0.7em;
+    align-items: center;
+    background-color: #121212cf;
+    border-radius: 0.5em;
+    transition: transform 0.3s ease; /* Плавен преход за зуума */
+}
+
+.publish-playlist:hover {
+    transform: scale(1.02); /* Леко увеличаване на размера при hover */
+}
+
+.publish-playlist h5 {
+    font-size: 1.1em;
+    color: #eee;
+    padding: 5px 10px;
+}
+
+.publish-playlist-title {
+    position: absolute;
+    color: #fff;
+    top: 17.1em;
+    left: 7px;
+    font-size: 0.94em;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
 }
