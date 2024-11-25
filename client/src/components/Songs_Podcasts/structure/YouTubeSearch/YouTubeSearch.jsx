@@ -160,7 +160,7 @@ const YouTubeSearch = ({
                                 alt={video.snippet.title}
                             />
                         </div>
-                        <h4 className={style['song-title']}>{video.snippet.title}</h4>
+                        <h4 className={style['song-title']}>{video.snippet.title.substring(0, 75)}..</h4>
 
                         <img
                             onClick={showOrHideOptionsHandler}
