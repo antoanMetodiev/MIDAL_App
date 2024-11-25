@@ -64,6 +64,26 @@ app.post('/get-songs', async (req, res) => {
     }
 });
 
+
+app.post("/publish-playlist", async (req, res) => {
+    const { myId, playlistObject } = req.body;
+
+    try {
+        const newMyUserData = await UserModel.findByIdAndUpdate(
+            myId,
+            { $push: { myPublishedPlaylists: playlistObject } },
+            { new: true }
+        );
+
+        return res.json({ newMyUserData });
+    } catch (error) {
+        console.log(error);
+        return res.json({});
+    }
+});
+
+
+
 app.post('/add-song-to-one-playlist', async (req, res) => {
     const { song, playlistName, myId } = req.body;
 
